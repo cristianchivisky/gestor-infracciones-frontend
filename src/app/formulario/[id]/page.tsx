@@ -111,7 +111,7 @@ const Formulario = ({ params }: FormularioProps) => {
             setLoading(true)
             fetchInfraccionData();
         };
-    }, [infraccionId]);
+    }, [infraccionId, apiUrl]);
     
     // Fetch options for vehicles and records
     useEffect(() => {

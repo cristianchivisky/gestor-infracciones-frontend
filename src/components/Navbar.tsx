@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '../context/AuthContext';
+import Image from 'next/image';
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -41,8 +42,7 @@ export default function Navbar() {
           </div>
           <div className="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
             <div className="flex-shrink-0">
-              <img src="/favicon.ico" alt="Logo" className="h-10 w-10 mr-3" />
-          </div>
+              <Image src="/favicon.ico" alt="Logo" width={40} height={40} className="h-10 w-10 mr-3" />          </div>
             {isAuthenticated && (
             <div className="hidden sm:block sm:ml-6">
               <div className="flex space-x-4">

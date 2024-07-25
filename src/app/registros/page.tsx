@@ -47,7 +47,8 @@ const Registros = () => {
     };
 
     fetchData();
-  }, []);
+  }, [apiUrl]);
+  
   if (!registros) return <p className="flex min-h-screen items-center justify-center text-xl font-bold">Cargando...</p>;
 
   return (

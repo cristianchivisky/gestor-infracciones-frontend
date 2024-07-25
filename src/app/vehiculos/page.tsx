@@ -47,7 +47,7 @@ const Vehiculos = () => {
     };
 
     fetchData();
-  }, []);
+  }, [apiUrl]);
 
   if (!vehiculos) return <p className="flex min-h-screen items-center justify-center p-4 text-xl font-bold">Cargando...</p>;
 

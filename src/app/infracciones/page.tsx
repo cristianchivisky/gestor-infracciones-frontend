@@ -52,7 +52,7 @@ const Infracciones = () => {
     };
 
     fetchData();
-  }, []);
+  }, [apiUrl]);
 
   // Handle search input change
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
