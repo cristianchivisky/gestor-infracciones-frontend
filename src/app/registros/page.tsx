@@ -8,6 +8,7 @@ import { Registro } from '@/types/registro';
 const Registros = () => {
   useAuthRedirect();
   const [registros, setRegistros] = useState<Registro[] | null>(null);
+  const apiUrl = process.env.NEXT_PUBLIC_BACKEND_URL
 
   // useEffect to fetch registro data when the component mounts
   useEffect(() => {
@@ -30,7 +31,7 @@ const Registros = () => {
 
       try {
         const response = await axios.post(
-          'http://localhost:5000/graphql',
+          `${apiUrl}`,
           { query },
           {
             headers: {

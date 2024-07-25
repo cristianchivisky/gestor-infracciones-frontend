@@ -39,6 +39,17 @@ const FormularioInfraccion: React.FC<FormularioInfraccionProps> = ({ initialData
         patenteVehiculoId: '',
         numeroRegistroId: 0,
     })
+    const [errors, setErrors] = useState({
+        codigoInfraccion: '',
+        fecha: '',
+        monto: '',
+        hora: '',
+        pagado: '',
+        patenteVehiculoId: '',
+        numeroRegistroId: ''
+    });
+    const apiUrl = process.env.NEXT_PUBLIC_BACKEND_URL
+
     // Effect to set initial form data when component mounts or initialData changes
     useEffect(() => {
         if (initialData) {
@@ -56,12 +67,60 @@ const FormularioInfraccion: React.FC<FormularioInfraccionProps> = ({ initialData
         }
     }, [initialData]);
 
-    //console.log(initialData)
-    //console.log(infraccionData)
+    const validateInputs = () => {
+        const newErrors = {
+            codigoInfraccion: '',
+            fecha: '',
+            hora: '',
+            monto: '',
+            pagado: '',
+            patenteVehiculoId: '',
+            numeroRegistroId: ''
+        };
+        const currentDate = new Date().toISOString().split('T')[0];
+
+        if (!infraccion.codigoInfraccion) {
+            newErrors.codigoInfraccion = 'El código de infracción es obligatorio.';
+        } else if (!/^[A-Z0-9]+$/.test(infraccion.codigoInfraccion)) {
+            newErrors.codigoInfraccion = 'El código de infracción debe contener solo letras mayúsculas y números.';
+        }
+
+        if (!infraccion.fecha) {
+            newErrors.fecha = 'La fecha es obligatoria.';
+        } else if (infraccion.fecha > currentDate) {
+            newErrors.fecha = 'La fecha no puede ser en el futuro.';
+        }
+
+        if (!infraccion.hora) {
+            newErrors.hora = 'La hora es obligatoria.';
+        }
+
+        if (infraccion.monto === null || infraccion.monto === undefined || isNaN(infraccion.monto)) {
+            newErrors.monto = 'El monto es obligatorio.';
+        } else if (infraccion.monto < 0) {
+            newErrors.monto = 'El monto no puede ser menor a cero.';
+        }
+
+        if (!infraccion.patenteVehiculoId) {
+            newErrors.patenteVehiculoId = 'La patente del vehículo es obligatoria.';
+        }
+
+        if (!infraccion.numeroRegistroId) {
+            newErrors.numeroRegistroId = 'El número de registro es obligatorio.';
+        }
+
+        setErrors(newErrors);
+        return !Object.values(newErrors).some(error => error);
+    };
+
+
     // Handle form submission for updating an existing infraction
     const handleUpdateInfraccionSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        //console.log(infraccion);
+        if (!validateInputs()) {
+            toast.error('Corrige los errores en el formulario.');
+            return;
+        }
         const mutation = `
         mutation UpdateInfraccion($numeroInfraccion: Int!, $codigoInfraccion: String!, $fecha: String!, $hora: String!, $observaciones: String, $monto: Float!, $pagado: Boolean!, $patenteVehiculoId: String!, $numeroRegistroId: Int!) {
             updateInfraccion(numeroInfraccion: $numeroInfraccion, codigoInfraccion: $codigoInfraccion, fecha: $fecha, hora: $hora, observaciones: $observaciones, monto: $monto, pagado: $pagado, patenteVehiculoId: $patenteVehiculoId, numeroRegistroId: $numeroRegistroId) {
@@ -90,7 +149,7 @@ const FormularioInfraccion: React.FC<FormularioInfraccionProps> = ({ initialData
         };
     
         try {
-            const response = await axios.post('http://localhost:5000/graphql', {
+            const response = await axios.post(`${apiUrl}`, {
                 query: mutation,
                 variables
         }, {
@@ -112,6 +171,10 @@ const FormularioInfraccion: React.FC<FormularioInfraccionProps> = ({ initialData
     // Handle form submission for creating a new infraction
     const handleCreateInfraccionSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        if (!validateInputs()) {
+            toast.error('Corrige los errores en el formulario.');
+            return;
+        }
         const mutation = `mutation CreateInfraccion($codigoInfraccion: String!, $fecha: String!, $hora: String!, $observaciones: String, $monto: Float!, $pagado: Boolean!, $patenteVehiculoId: String!, $numeroRegistroId: Int!) {
         createInfraccion(codigoInfraccion: $codigoInfraccion, fecha: $fecha, hora: $hora, observaciones: $observaciones, monto: $monto, pagado: $pagado, patenteVehiculoId: $patenteVehiculoId, numeroRegistroId: $numeroRegistroId) {
             infraccion {
@@ -136,7 +199,7 @@ const FormularioInfraccion: React.FC<FormularioInfraccionProps> = ({ initialData
         };
 
         try {
-            const response = await axios.post('http://localhost:5000/graphql', { query: mutation, variables }, { headers: { 'Content-Type': 'application/json' } });
+            const response = await axios.post(`${apiUrl}`, { query: mutation, variables }, { headers: { 'Content-Type': 'application/json' } });
             if (response.data.errors) {
                 toast.error('Error creando infracción');
                 console.error('GraphQL Errors:', response.data.errors);
@@ -175,7 +238,7 @@ const FormularioInfraccion: React.FC<FormularioInfraccionProps> = ({ initialData
     
             try {
                 const response = await axios.post(
-                    'http://localhost:5000/graphql',
+                    `${apiUrl}`,
                     { query: mutation },
                     {
                         headers: {
@@ -246,10 +309,10 @@ const FormularioInfraccion: React.FC<FormularioInfraccionProps> = ({ initialData
                     onChange={(e) =>
                     setInfraccion({ ...infraccion, codigoInfraccion: e.target.value })
                     }
-                    required
                     placeholder="Código de Infracción"
                     className="w-full p-2 mb-4 border border-gray-300 rounded"
                 />
+                {errors.codigoInfraccion && <p className="text-red-500 text-xs">{errors.codigoInfraccion}</p>}
             </label>
             <label htmlFor="fecha">
                 Fecha:
@@ -259,10 +322,10 @@ const FormularioInfraccion: React.FC<FormularioInfraccionProps> = ({ initialData
                     name="fecha"
                     value={infraccion.fecha || ''}
                     onChange={(e) => setInfraccion({ ...infraccion, fecha: e.target.value })}
-                    required
                     placeholder="Fecha"
                     className="w-full p-2 mb-4 border border-gray-300 rounded"
                 />
+                 {errors.fecha && <p className="text-red-500 text-xs">{errors.fecha}</p>}
             </label>
             <label htmlFor="hora">
                 Hora:
@@ -272,10 +335,10 @@ const FormularioInfraccion: React.FC<FormularioInfraccionProps> = ({ initialData
                     type="time"
                     value={infraccion.hora || ''}
                     onChange={(e) => setInfraccion({ ...infraccion, hora: e.target.value })}
-                    required
                     placeholder="Hora"
                     className="w-full p-2 mb-4 border border-gray-300 rounded"
                 />
+                {errors.hora && <p className="text-red-500 text-xs">{errors.hora}</p>}
             </label>
             <label htmlFor="observaciones" className="col-span-2">
                 Observaciones:
@@ -284,8 +347,8 @@ const FormularioInfraccion: React.FC<FormularioInfraccionProps> = ({ initialData
                     name="observaciones"
                     value={infraccion.observaciones || ''}
                     onChange={(e) => setInfraccion({ ...infraccion, observaciones: e.target.value })}
-                    required
                     placeholder="Observaciones"
+                    required
                     className="w-full p-2 mb-4 border border-gray-300 rounded"
                 />
             </label>
@@ -297,10 +360,10 @@ const FormularioInfraccion: React.FC<FormularioInfraccionProps> = ({ initialData
                     type="number"
                     value={infraccion.monto || ''}
                     onChange={(e) => setInfraccion({ ...infraccion, monto: parseFloat(e.target.value) })}
-                    required
                     placeholder="Monto"
                     className="w-full p-2 mb-4 border border-gray-300 rounded"
                 />
+                {errors.monto && <p className="text-red-500 text-xs">{errors.monto}</p>}
             </label>
             <label htmlFor="pagado" >
                 Pagado:
@@ -309,13 +372,14 @@ const FormularioInfraccion: React.FC<FormularioInfraccionProps> = ({ initialData
                     name="pagado"
                     value={infraccion.pagado.toString()}
                     onChange={(e) => setInfraccion({ ...infraccion, pagado: e.target.value === 'true'})}
-                    required
                     className="w-full p-2 mb-4 border border-gray-300 rounded"
                 >
+
                     <option value="">Selecciona...</option>
                     <option value="true">Sí</option>
                     <option value="false">No</option>
                 </select>
+                {errors.pagado && <p className="text-red-500 text-xs">{errors.pagado}</p>}
             </label>
             <label htmlFor="vehiculo" className="col-span-2">
                 Patente del Vehículo:
@@ -324,7 +388,6 @@ const FormularioInfraccion: React.FC<FormularioInfraccionProps> = ({ initialData
                     name="vehiculo"
                     value={infraccion.patenteVehiculoId || ''}
                     onChange={(e) => setInfraccion({ ...infraccion, patenteVehiculoId: e.target.value })}
-                    required
                     className="w-full p-2 mb-4 border border-gray-300 rounded"
                 >
                     <option value="">Selecciona...</option>
@@ -332,6 +395,7 @@ const FormularioInfraccion: React.FC<FormularioInfraccionProps> = ({ initialData
                         <option key={index} value={option.value}>{option.label}</option>
                     ))}
                 </select>
+                {errors.patenteVehiculoId && <p className="text-red-500 text-xs">{errors.patenteVehiculoId}</p>}
             </label>
             <label  htmlFor="registro" className="col-span-2">
                 Número de Registro:
@@ -340,7 +404,6 @@ const FormularioInfraccion: React.FC<FormularioInfraccionProps> = ({ initialData
                     name="registro"
                     value={infraccion.numeroRegistroId}
                     onChange={(e) => setInfraccion({ ...infraccion, numeroRegistroId: parseInt(e.target.value) })}
-                    required
                     className="w-full p-2 mb-4 border border-gray-300 rounded"
                 >
                     <option value="">Selecciona...</option>
@@ -348,6 +411,7 @@ const FormularioInfraccion: React.FC<FormularioInfraccionProps> = ({ initialData
                         <option key={index} value={option.value}>{option.label}</option>
                     ))}
                 </select>
+                {errors.numeroRegistroId && <p className="text-red-500 text-xs">{errors.numeroRegistroId}</p>}
             </label>
             </div>
             <button type="submit" className="w-full mt-4 p-2 mb-4 bg-blue-500 text-white rounded">

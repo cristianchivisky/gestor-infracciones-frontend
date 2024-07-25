@@ -10,14 +10,36 @@ import { useAuth } from '../context/AuthContext';
 export default function Home() {
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const { login } = useAuth();
   const router = useRouter();
   const bcrypt = require('bcryptjs');
   const [loading, setLoading] = useState<boolean>(false);
+  const apiUrl = process.env.NEXT_PUBLIC_BACKEND_URL
+
+  // Validate form inputs
+  const validateForm = () => {
+    const errors: { [key: string]: string } = {};
+    
+    if (!username) {
+      errors.username = 'El nombre de usuario es obligatorio';
+    }
+    
+    if (!password) {
+      errors.password = 'La contraseña es obligatoria';
+    }
+    
+    setErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
 
   // Handle form submission
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!validateForm()) {
+      toast.error('Corrige los errores en el formulario.');
+      return;
+    }
     setLoading(true);
     const query = `
       query Usuario($nombre: String!) {
@@ -37,7 +59,7 @@ export default function Home() {
 
     try {
       const response = await axios.post(
-        'http://localhost:5000/graphql',
+        `${apiUrl}`,
         { query, variables },
         {
           headers: {
@@ -68,26 +90,29 @@ export default function Home() {
       <div className="w-full max-w-md bg-white rounded-lg p-8 shadow-md">
         <form onSubmit={handleSubmit} className=" ">
           <h1 className="text-2xl mb-4">Iniciar Sesión</h1>
-          <input
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            placeholder="Nombre"
-            required
-            className="w-full p-2 mb-4 border border-gray-300 rounded"
-          />
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="Contraseña"
-            required
-            className="w-full p-2 mb-4 border border-gray-300 rounded"
-          />
+          <div className="mb-4">
+            <input
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              placeholder="Nombre"
+              className={`w-full p-2 border ${errors.username ? 'border-red-500' : 'border-gray-300'} rounded`}
+            />
+            {errors.username && <p className="text-red-500 text-xs mt-1">{errors.username}</p>}
+          </div>
+          <div className="mb-4">
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Contraseña"
+              className={`w-full p-2 border ${errors.password ? 'border-red-500' : 'border-gray-300'} rounded`}
+            />
+            {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password}</p>}
+          </div>
           <button type="submit" disabled={loading} className="w-full p-2 mb-4 bg-blue-500 hover:bg-blue-700 text-white rounded cursor-pointer">
             {loading ? 'Cargando...' : 'Iniciar Sesión'}
           </button>
-          
         </form>
         <Link href="/registro">
           <button className="w-full p-2 bg-gray-500 hover:bg-gray-700 text-white rounded cursor-pointer">

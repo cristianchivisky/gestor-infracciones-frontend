@@ -1,8 +1,8 @@
 'use client'
+
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '../context/AuthContext';
-import Link from 'next/link'
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -41,9 +41,7 @@ export default function Navbar() {
           </div>
           <div className="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
             <div className="flex-shrink-0">
-              <Link href='/'>
-                <img src="/favicon.ico" alt="Logo" className="h-10 w-10 mr-3" />
-              </Link>
+              <img src="/favicon.ico" alt="Logo" className="h-10 w-10 mr-3" />
           </div>
             {isAuthenticated && (
             <div className="hidden sm:block sm:ml-6">

@@ -6,8 +6,9 @@ import { useAuthRedirect } from '@/hooks/useAuthRedirect';
 import { Vehiculo } from '@/types/vehiculo';
 
 const Vehiculos = () => {
-  const [vehiculos, setVehiculos] = useState<Vehiculo[] | null>(null);
   useAuthRedirect();
+  const [vehiculos, setVehiculos] = useState<Vehiculo[] | null>(null);
+  const apiUrl = process.env.NEXT_PUBLIC_BACKEND_URL
 
   // useEffect to fetch vehicle data when the component mounts
   useEffect(() => {
@@ -30,7 +31,7 @@ const Vehiculos = () => {
 
       try {
         const response = await axios.post(
-          'http://localhost:5000/graphql',
+          `${apiUrl}`,
           { query },
           {
             headers: {

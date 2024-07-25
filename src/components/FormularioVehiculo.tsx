@@ -15,6 +15,82 @@ const FormularioVehiculo: React.FC<FormularioVehiculoProps> = ({ initialData }) 
         apellidoPropietario: '',
         patenteVehiculo: ''
     });
+    const [errors, setErrors] = useState<{ [key: string]: string }>({});
+    const apiUrl = process.env.NEXT_PUBLIC_BACKEND_URL
+
+    // Validate inputs
+    const validateInputs = () => {
+        const currentYear = new Date().getFullYear();
+        const newErrors: { [key: string]: string } = {};
+    
+        // Validate patenteVehiculo
+        if (!vehiculoData.patenteVehiculo.trim()) {
+            newErrors.patenteVehiculo = 'La patente no puede estar vacía.';
+        } else if (!/^[A-Z0-9]+$/.test(vehiculoData.patenteVehiculo)) {
+            newErrors.patenteVehiculo = 'La patente solo puede contener letras mayúsculas y números.';
+        }
+    
+        // Validate anioFabricacion
+        if (!vehiculoData.anioFabricacion) {
+            newErrors.anioFabricacion = 'El año de fabricación no puede estar vacío.';
+        } else if (!/^[0-9]+$/.test(vehiculoData.anioFabricacion.toString()) || vehiculoData.anioFabricacion <= 0) {
+            newErrors.anioFabricacion = 'El año de fabricación debe ser un número entero mayor que cero.';
+        } else if (vehiculoData.anioFabricacion > currentYear) {
+            newErrors.anioFabricacion = 'El año de fabricación no puede ser mayor al año actual.';
+        }
+    
+        // Validate nombrePropietario
+        if (!vehiculoData.nombrePropietario.trim()) {
+            newErrors.nombrePropietario = 'El nombre no puede estar vacío.';
+        } else if (!/^[A-Za-zÁÉÍÓÚáéíóúñÑ\s]+$/.test(vehiculoData.nombrePropietario)) {
+            newErrors.nombrePropietario = 'El nombre solo puede contener letras y acentos.';
+        }
+    
+        // Validate apellidoPropietario
+        if (!vehiculoData.apellidoPropietario.trim()) {
+            newErrors.apellidoPropietario = 'El apellido no puede estar vacío.';
+        } else if (!/^[A-Za-zÁÉÍÓÚáéíóúñÑ\s]+$/.test(vehiculoData.apellidoPropietario)) {
+            newErrors.apellidoPropietario = 'El apellido solo puede contener letras y acentos.';
+        }
+    
+        // Validate domicilioPropietarioCalle
+        if (!vehiculoData.domicilioPropietarioCalle.trim()) {
+            newErrors.domicilioPropietarioCalle = 'La calle no puede estar vacía.';
+        } else if (!/^[A-Za-z0-9ÁÉÍÓÚáéíóúñÑ\s]+$/.test(vehiculoData.domicilioPropietarioCalle)) {
+            newErrors.domicilioPropietarioCalle = 'La calle solo puede contener letras, números y acentos.';
+        }
+    
+        // Validate domicilioPropietarioNumero
+        if (!vehiculoData.domicilioPropietarioNumero) {
+            newErrors.domicilioPropietarioNumero = 'El número de domicilio no puede estar vacío.';
+        } else if (!/^[0-9]+$/.test(vehiculoData.domicilioPropietarioNumero.toString()) || vehiculoData.domicilioPropietarioNumero <= 0) {
+            newErrors.domicilioPropietarioNumero = 'El número de domicilio debe ser un entero mayor que cero.';
+        }
+    
+        // Validate domicilioPropietarioCiudad
+        if (!vehiculoData.domicilioPropietarioCiudad.trim()) {
+            newErrors.domicilioPropietarioCiudad = 'La ciudad no puede estar vacía.';
+        } else if (!/^[A-Za-z0-9ÁÉÍÓÚáéíóúñÑ\s]+$/.test(vehiculoData.domicilioPropietarioCiudad)) {
+            newErrors.domicilioPropietarioCiudad = 'La ciudad puede contener letras, números y acentos.';
+        }
+    
+        // Validate marca
+        if (!vehiculoData.marca.trim()) {
+            newErrors.marca = 'La marca no puede estar vacía.';
+        } else if (!/^[A-Za-z0-9ÁÉÍÓÚáéíóúñÑ\s]+$/.test(vehiculoData.marca)) {
+            newErrors.marca = 'La marca solo puede contener letras y números.';
+        }
+    
+        // Validate modelo
+        if (!vehiculoData.modelo.trim()) {
+            newErrors.modelo = 'El modelo no puede estar vacío.';
+        } else if (!/^[A-Za-z0-9ÁÉÍÓÚáéíóúñÑ\s]+$/.test(vehiculoData.modelo)) {
+            newErrors.modelo = 'El modelo solo puede contener letras y números.';
+        }
+    
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };    
 
     // Update state with initial data if provided
     useEffect(() => {
@@ -26,6 +102,10 @@ const FormularioVehiculo: React.FC<FormularioVehiculoProps> = ({ initialData }) 
     // Handle form submission
     const handleVehiculoSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        if (!validateInputs()) {
+            toast.error('Corrige los errores en el formulario.');
+            return;
+        }
         // Define mutation for GraphQL request
         const mutation = initialData ? `
         mutation UpdateVehiculo($patenteVehiculo: String!, $anioFabricacion: Int!, $domicilioPropietarioCalle: String!, $domicilioPropietarioNumero: Int!, $domicilioPropietarioCiudad: String!, $marca: String!, $modelo: String!, $nombrePropietario: String!, $apellidoPropietario: String!) {
@@ -69,10 +149,10 @@ const FormularioVehiculo: React.FC<FormularioVehiculoProps> = ({ initialData }) 
             apellidoPropietario: vehiculoData.apellidoPropietario,
             patenteVehiculo: vehiculoData.patenteVehiculo
         };
-        console.log(variables)
+        //console.log(variables)
         try {
             // Make a POST request to the GraphQL API
-            const response = await axios.post('http://localhost:5000/graphql', { query: mutation, variables }, { headers: { 'Content-Type': 'application/json' } });
+            const response = await axios.post(`${apiUrl}`, { query: mutation, variables }, { headers: { 'Content-Type': 'application/json' } });
             if (response.data.errors) {
                 toast.error(`Error ${initialData ? 'actualizando' : 'creando'} vehículo`);
                 console.error('GraphQL Errors:', response.data.errors);
@@ -95,10 +175,10 @@ const FormularioVehiculo: React.FC<FormularioVehiculoProps> = ({ initialData }) 
                         type="text"
                         value={vehiculoData.patenteVehiculo || ''}
                         onChange={(e) => setVehiculoData({ ...vehiculoData, patenteVehiculo: e.target.value })}
-                        required
                         placeholder="Patente Vehículo"
                         className="w-full p-2 mb-4 border border-gray-300 rounded"
                     />
+                    {errors.patenteVehiculo && <span className="text-red-500 text-xs">{errors.patenteVehiculo}</span>}
                 </label>
                 <label>
                     Año de Fabricación:
@@ -106,10 +186,10 @@ const FormularioVehiculo: React.FC<FormularioVehiculoProps> = ({ initialData }) 
                         type="number"
                         value={vehiculoData.anioFabricacion || ''}
                         onChange={(e) => setVehiculoData({ ...vehiculoData, anioFabricacion: Number(e.target.value) })}
-                        required
                         placeholder="Año de Fabricación"
                         className="w-full p-2 mb-4 border border-gray-300 rounded"
                     />
+                    {errors.anioFabricacion && <span className="text-red-500 text-xs">{errors.anioFabricacion}</span>}
                 </label>
                 <label className="col-span-2">
                     Nombre del Propietario:
@@ -118,8 +198,8 @@ const FormularioVehiculo: React.FC<FormularioVehiculoProps> = ({ initialData }) 
                         value={vehiculoData.nombrePropietario} 
                         onChange={(e) => setVehiculoData({ ...vehiculoData, nombrePropietario: e.target.value })} 
                         placeholder="Nombre Propietario" 
-                        required
                         className="w-full p-2 mb-4 border border-gray-300 rounded"/>
+                        {errors.nombrePropietario && <span className="text-red-500 text-xs">{errors.nombrePropietario}</span>}
                 </label>
                 <label className="col-span-2">
                     Apellido del Propietario:
@@ -128,8 +208,8 @@ const FormularioVehiculo: React.FC<FormularioVehiculoProps> = ({ initialData }) 
                         value={vehiculoData.apellidoPropietario} 
                         onChange={(e) => setVehiculoData({ ...vehiculoData, apellidoPropietario: e.target.value })} 
                         placeholder="Apellido Propietario" 
-                        required
                         className="w-full p-2 mb-4 border border-gray-300 rounded"/>
+                        {errors.apellidoPropietario && <span className="text-red-500 text-xs">{errors.apellidoPropietario}</span>}
                 </label>
                 <label className="col-span-2">
                     Domicilio Calle:
@@ -138,10 +218,10 @@ const FormularioVehiculo: React.FC<FormularioVehiculoProps> = ({ initialData }) 
                         name="domicilioPropietarioCalle"
                         value={vehiculoData.domicilioPropietarioCalle || ''}
                         onChange={(e) => setVehiculoData({ ...vehiculoData, domicilioPropietarioCalle: e.target.value })}
-                        required
                         placeholder="Domicilio Propietario Calle"
                         className="w-full p-2 mb-4 border border-gray-300 rounded"
                     />
+                    {errors.domicilioPropietarioCalle && <span className="text-red-500 text-xs">{errors.domicilioPropietarioCalle}</span>}
                 </label>
                 <label className="col-span-2">
                     Domicilio Número:
@@ -150,10 +230,10 @@ const FormularioVehiculo: React.FC<FormularioVehiculoProps> = ({ initialData }) 
                         name="domicilioPropietarioNumero"
                         value={vehiculoData.domicilioPropietarioNumero || ''}
                         onChange={(e) => setVehiculoData({ ...vehiculoData, domicilioPropietarioNumero: Number(e.target.value) })}
-                        required
                         placeholder="Domicilio Propietario Número" 
                         className="w-full p-2 mb-4 border border-gray-300 rounded"
                     />
+                    {errors.domicilioPropietarioNumero && <span className="text-red-500 text-xs">{errors.domicilioPropietarioNumero}</span>}
                 </label>
                 <label className="col-span-2">
                     Ciudad:
@@ -161,10 +241,10 @@ const FormularioVehiculo: React.FC<FormularioVehiculoProps> = ({ initialData }) 
                         type="text"
                         value={vehiculoData.domicilioPropietarioCiudad || ''}
                         onChange={(e) => setVehiculoData({ ...vehiculoData, domicilioPropietarioCiudad: e.target.value })}
-                        required
                         placeholder="Domicilio Ciudad"
                         className="w-full p-2 mb-4 border border-gray-300 rounded"
                     />
+                    {errors.domicilioPropietarioCiudad && <span className="text-red-500 text-xs">{errors.domicilioPropietarioCiudad}</span>}
                 </label>
                 <label className="col-span-2">
                     Marca del Vehículo:
@@ -172,9 +252,9 @@ const FormularioVehiculo: React.FC<FormularioVehiculoProps> = ({ initialData }) 
                         type="text"
                         value={vehiculoData.marca || ''}
                         onChange={(e) => setVehiculoData({ ...vehiculoData, marca: e.target.value })}
-                        required
                         className="w-full p-2 mb-4 border border-gray-300 rounded"
                     />
+                    {errors.marca && <span className="text-red-500 text-xs">{errors.marca}</span>}
                 </label>
                 <label className="col-span-2">
                     Modelo del Vehículo:
@@ -182,9 +262,9 @@ const FormularioVehiculo: React.FC<FormularioVehiculoProps> = ({ initialData }) 
                         type="text"
                         value={vehiculoData.modelo || ''}
                         onChange={(e) => setVehiculoData({ ...vehiculoData, modelo: e.target.value })}
-                        required
                         className="w-full p-2 mb-4 border border-gray-300 rounded"
                     />
+                    {errors.modelo && <span className="text-red-500 text-xs">{errors.modelo}</span>}
                 </label>
             </div>
             <button type="submit" className="w-full mt-4 p-2 bg-blue-500 hover:bg-blue-700 text-white rounded">

@@ -6,15 +6,51 @@ import axios from 'axios';
 import Link from 'next/link'
 import { toast } from 'react-hot-toast';
 import { Usuario } from '@/types/usuario';
+import validator from 'validator';
 
 const Registro = () => {
   const [formState, setFormState] = useState<Usuario>({ username: '', password: '', email: '' });
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const router = useRouter();
   const bcrypt = require('bcryptjs');
   const [loading, setLoading] = useState(false);
+  const apiUrl = process.env.NEXT_PUBLIC_BACKEND_URL
+
+  const validateForm = () => {
+    const errors: { [key: string]: string } = {};
+    
+    if (!formState.username) {
+      errors.username = 'El nombre es obligatorio';
+    } else if (formState.username.length < 6) {
+      errors.username = 'El nombre debe tener al menos 6 caracteres';
+    }
+    
+    if (!validator.isEmail(formState.email)) {
+      errors.email = 'El email no es válido';
+    }
+    
+    if (formState.password.length < 6) {
+      errors.password = 'La contraseña debe tener al menos 6 caracteres';
+    } else if (!/[A-Z]/.test(formState.password)) {
+      errors.password = 'La contraseña debe contener al menos una letra mayúscula';
+    } else if (!/[a-z]/.test(formState.password)) {
+      errors.password = 'La contraseña debe contener al menos una letra minúscula';
+    } else if (!/[0-9]/.test(formState.password)) {
+      errors.password = 'La contraseña debe contener al menos un número';
+    } else if (!/[!@#$%^&*(),.?":{}|<>]/.test(formState.password)) {
+      errors.password = 'La contraseña debe contener al menos un símbolo';
+    }
+    
+    setErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!validateForm()) {
+      toast.error('Corrige los errores en el formulario.');
+      return;
+    }
     setLoading(true);
     // Hash the password before sending it to the server
     const hashedPassword = await bcrypt.hash(formState.password, 10);
@@ -38,7 +74,7 @@ const Registro = () => {
 
     try {
       const response = await axios.post(
-        'http://localhost:5000/graphql',
+        `${apiUrl}`,
         {
           query: mutation,
           variables: variables
@@ -71,35 +107,41 @@ const Registro = () => {
 
   return (
     <div className="flex min-h-screen items-center justify-center p-4">
-      <form onSubmit={handleSubmit} className="bg-white p-8 rounded-lg shadow-md">
+      <form onSubmit={handleSubmit} className="w-full max-w-lg bg-white p-8 rounded-lg shadow-md">
         <h1 className="text-2xl mb-4">Registrarse</h1>
-        <input
-          type="text"
-          name="username"
-          value={formState.username}
-          onChange={handleChange}
-          placeholder="Nombre"
-          required
-          className="w-full p-2 mb-4 border border-gray-300 rounded"
-        />
-        <input
-          type="email"
-          name="email"
-          value={formState.email}
-          onChange={handleChange}
-          placeholder="Email"
-          required
-          className="w-full p-2 mb-4 border border-gray-300 rounded"
-        />
-        <input
-          type="password"
-          name="password" 
-          value={formState.password}
-          onChange={handleChange}
-          placeholder="Contraseña"
-          required
-          className="w-full p-2 mb-4 border border-gray-300 rounded"
-        />
+        <div className="mb-4">
+          <input
+            type="text"
+            name="username"
+            value={formState.username}
+            onChange={handleChange}
+            placeholder="Nombre"
+            className={`w-full p-2 border ${errors.username ? 'border-red-500' : 'border-gray-300'} rounded`}
+          />
+          {errors.username && <p className="text-red-500 text-xs mt-1">{errors.username}</p>}
+        </div>
+        <div className="w-full mb-4">
+          <input
+            type="text"
+            name="email"
+            value={formState.email}
+            onChange={handleChange}
+            placeholder="Email"
+            className={`w-full p-2 border ${errors.email ? 'border-red-500' : 'border-gray-300'} rounded`}
+          />
+          {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
+        </div>
+        <div className="mb-4">
+          <input
+            type="password"
+            name="password" 
+            value={formState.password}
+            onChange={handleChange}
+            placeholder="Contraseña"
+            className={`w-full p-2 border ${errors.password ? 'border-red-500' : 'border-gray-300'} rounded`}
+          />
+          {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password}</p>}
+        </div>
         <button type="submit" disabled={loading} className="w-full p-2 mb-4 bg-blue-500 hover:bg-blue-700 text-white rounded cursor-pointer">
           {loading ? 'Cargando...' : 'Registrar'}
         </button>

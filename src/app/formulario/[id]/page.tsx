@@ -45,6 +45,7 @@ const Formulario = ({ params }: FormularioProps) => {
     const [registrosOptions, setRegistrosOptions] = useState<RegistroOption[]>([]);
     const [infraccionData, setInfraccionData] = useState<InfraccionData | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
+    const apiUrl = process.env.NEXT_PUBLIC_BACKEND_URL
 
     // Fetch the infracción data based on the ID
     useEffect(() => {
@@ -86,7 +87,7 @@ const Formulario = ({ params }: FormularioProps) => {
             }
             `;
     
-            const response = await axios.post('http://localhost:5000/graphql', {
+            const response = await axios.post(`${apiUrl}`, {
                 query,
                 variables: { numeroInfraccion: infraccionId }
             }, {
