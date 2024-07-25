@@ -23,7 +23,7 @@ export default function RootLayout({
       <html lang="es">
         <body className={inter.className}>
           <Navbar/>
-          <Toaster position="top-center" reverseOrder={false} />
+          <Toaster position="top-center" reverseOrder={false} containerClassName="mt-12" />
           <main className="min-h-screen">
           {children}
           </main>

@@ -2,18 +2,25 @@
 
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useAuthRedirect } from '@/hooks/useAuthRedirect'; 
+import { Registro } from '@/types/registro';
 
 const Registros = () => {
-  const [registros, setRegistros] = useState(null);
+  useAuthRedirect();
+  const [registros, setRegistros] = useState<Registro[] | null>(null);
 
+  // useEffect to fetch registro data when the component mounts
   useEffect(() => {
     const fetchData = async () => {
       const query = `
         query {
           registros {
             numeroRegistro
-            nombreyapellido
-            domicilio
+            nombre
+            apellido
+            domicilioCalle
+            domicilioNumero
+            domicilioCiudad
             edad
             fechaEmision
             fechaVencimiento
@@ -40,7 +47,7 @@ const Registros = () => {
 
     fetchData();
   }, []);
-  if (!registros) return <p className="flex min-h-screen items-center justify-center p-4">Cargando...</p>;
+  if (!registros) return <p className="flex min-h-screen items-center justify-center text-xl font-bold">Cargando...</p>;
 
   return (
     <div className="p-8">
@@ -48,11 +55,15 @@ const Registros = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {registros.map((registro) => (
           <div key={registro.numeroRegistro} className="bg-white p-4 rounded-lg shadow-md">
-            <h2 className="text-xl mb-2">Registro #{registro.numeroRegistro}</h2>
-            <p>Nombre: {registro.nombreyapellido}</p>
-            <p>Domicilio: {registro.domicilio}</p>
+            <h2 className="text-xl mb-2 font-bold">Registro #{registro.numeroRegistro}</h2>
+            <p>Nombre: {registro.nombre}</p>
+            <p>Apellido: {registro.apellido}</p>
             <p>Edad: {registro.edad}</p>
-            <p>Fecha de Emisión: {registro.fechaEmision}</p>
+            <h3 className="mt-2 font-bold">Domicilio:</h3>
+            <p>Calle: {registro.domicilioCalle}</p>
+            <p>Número: {registro.domicilioNumero}</p>
+            <p>Ciudad: {registro.domicilioCiudad}</p>
+            <p className='mt-2'>Fecha de Emisión: {registro.fechaEmision}</p>
             <p>Fecha de Vencimiento: {registro.fechaVencimiento}</p>
           </div>
         ))}

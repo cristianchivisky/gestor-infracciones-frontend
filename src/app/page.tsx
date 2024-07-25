@@ -8,20 +8,24 @@ import { toast } from 'react-hot-toast';
 import { useAuth } from '../context/AuthContext';
 
 export default function Home() {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
   const { login } = useAuth();
   const router = useRouter();
+  const bcrypt = require('bcryptjs');
+  const [loading, setLoading] = useState<boolean>(false);
 
-  const handleSubmit = async (e) => {
+  // Handle form submission
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
+    setLoading(true);
     const query = `
-      query Usuario($nombre: String!, $contrasenia: String!) {
-        usuario(nombre: $nombre, contrasenia: $contrasenia) {
+      query Usuario($nombre: String!) {
+        usuario(nombre: $nombre) {
           id
           nombre
           email
+          contrasenia
         }
       }
     `;
@@ -41,8 +45,9 @@ export default function Home() {
           },
         }
       );
-
-      if (response.data.data.usuario) {
+      const user = response.data.data.usuario; // Extract user data from response
+      // Check if user exists and password matches
+      if (user && await bcrypt.compare(password, user.contrasenia)) {
         login();
         toast.success('Inicio de sesión exitoso');
         router.push('/infracciones');
@@ -53,12 +58,15 @@ export default function Home() {
     } catch (error) {
       toast.error('Error en el inicio de sesión');
       console.error('Login failed:', error);
+    } finally {
+      setLoading(false);
     }
   };
+  
   return (
     <div className="flex min-h-screen items-center justify-center p-4">
-      <div className="flex justify-center items-center h-full">
-        <form onSubmit={handleSubmit} className="bg-white p-8 rounded-lg shadow-md">
+      <div className="w-full max-w-md bg-white rounded-lg p-8 shadow-md">
+        <form onSubmit={handleSubmit} className=" ">
           <h1 className="text-2xl mb-4">Iniciar Sesión</h1>
           <input
             type="text"
@@ -76,15 +84,16 @@ export default function Home() {
             required
             className="w-full p-2 mb-4 border border-gray-300 rounded"
           />
-          <button type="submit" className="w-full p-2 mb-4 bg-blue-500 hover:bg-blue-700 text-white rounded cursor-pointer">
-            Iniciar Sesión
+          <button type="submit" disabled={loading} className="w-full p-2 mb-4 bg-blue-500 hover:bg-blue-700 text-white rounded cursor-pointer">
+            {loading ? 'Cargando...' : 'Iniciar Sesión'}
           </button>
-          <Link href="/registro">
-            <button type="submit" className="w-full p-2 bg-gray-500 hover:bg-gray-700 text-white rounded cursor-pointer">
-              Registrarse
-            </button>
-          </Link>
+          
         </form>
+        <Link href="/registro">
+          <button className="w-full p-2 bg-gray-500 hover:bg-gray-700 text-white rounded cursor-pointer">
+            Registrarse
+          </button>
+        </Link>
       </div>
     </div>
   );

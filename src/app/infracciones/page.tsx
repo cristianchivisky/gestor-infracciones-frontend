@@ -2,12 +2,18 @@
 
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import Link from 'next/link'
-import { toast } from 'react-hot-toast';
+import Link from 'next/link';
+import { useAuthRedirect } from '@/hooks/useAuthRedirect'; 
+import { Infraccion } from '@/types/infraccion'
 
 const Infracciones = () => {
-  const [infracciones, setInfracciones] = useState(null);
-  
+  useAuthRedirect();
+  const [infracciones, setInfracciones] = useState<Infraccion[]>([]);
+  const [filteredInfracciones, setFilteredInfracciones] = useState<Infraccion[]>([]);
+  const [searchTerm, setSearchTerm] = useState<string>('');
+  const [filterPaid, setFilterPaid] = useState<string>('all');
+
+  // Fetch infracciones data when the component mounts
   useEffect(() => {
     const fetchData = async () => {
       const query = `
@@ -20,13 +26,15 @@ const Infracciones = () => {
             monto
             pagado
             observaciones
+            numeroRegistroId
+            patenteVehiculoId
           }
         }
       `;
 
       try {
         const response = await axios.post(
-          'http://localhost:5000/graphql', 
+          'http://localhost:5000/graphql',
           { query },
           {
             headers: {
@@ -36,6 +44,7 @@ const Infracciones = () => {
         );
 
         setInfracciones(response.data.data.infracciones);
+        setFilteredInfracciones(response.data.data.infracciones);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -44,90 +53,83 @@ const Infracciones = () => {
     fetchData();
   }, []);
 
-  const handleDelete = async (numeroInfraccion) => {
-    const confirmDelete = async () => {
-      const mutation = `
-        mutation {
-          deleteInfraccion(numeroInfraccion: ${numeroInfraccion}) {
-            infraccion {
-              numeroInfraccion
-            }
-          }
-        }
-      `;
-
-      try {
-        const response = await axios.post(
-          'http://localhost:5000/graphql',
-          { query: mutation },
-          {
-            headers: {
-              'Content-Type': 'application/json',
-            }
-          }
-        );
-
-        if (response.data.data.deleteInfraccion.infraccion) {
-          toast.success('Infracción eliminada correctamente');
-          // Refrescar la lista de infracciones después de eliminar
-        } else {
-          toast.error('Error al eliminar la infracción 1');
-        }
-      } catch (error) {
-        console.error('Error deleting infraction:', error);
-        toast.error('Error al eliminar la infracción 2');
-      }
-    };
-
-    toast(
-      (t) => (
-        <span>
-          ¿Estás seguro de eliminar esta infracción?
-          <br />
-          <button
-            onClick={() => {
-              confirmDelete();
-              toast.dismiss(t.id);
-            }}
-            className="bg-red-500 text-white px-4 py-2 rounded-md ml-2"
-          >
-            Confirmar
-          </button>
-          <button
-            onClick={() => toast.dismiss(t.id)}
-            className="bg-gray-500 text-white px-4 py-2 rounded-md ml-2"
-          >
-            Cancelar
-          </button>
-        </span>
-      ),
-      { duration: 5000 }
-    );
+  // Handle search input change
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setSearchTerm(value);
+    filterInfracciones(value, filterPaid);
   };
 
-  //console.log(infracciones)
-  if (!infracciones) return <p className="flex min-h-screen items-center justify-center p-4">Cargando...</p>;
-  
+  // Handle filter change (paid status)
+  const handleFilterChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const value = e.target.value;
+    setFilterPaid(value);
+    filterInfracciones(searchTerm, value);
+  };
+
+  // Filter infracciones based on search term and paid status
+  const filterInfracciones = (search: string, paid: string) => {
+    const lowercasedSearch = search.toLowerCase();
+    const filtered = infracciones
+      .filter(infraccion => {
+        // Check if the infracción matches the search term
+        const matchesSearch = infraccion.codigoInfraccion.toLowerCase().includes(lowercasedSearch) ||
+          infraccion.fecha.includes(lowercasedSearch) ||
+          infraccion.hora.includes(lowercasedSearch) ||
+          infraccion.monto.toString().includes(lowercasedSearch) ||
+          infraccion.numeroRegistroId.toString().includes(lowercasedSearch) ||
+          infraccion.patenteVehiculoId.toLowerCase().includes(lowercasedSearch) ||
+          infraccion.observaciones.toLowerCase().includes(lowercasedSearch);
+          
+        // Check if the infracción matches the paid status filter
+        const matchesPaid = paid === 'all' || infraccion.pagado.toString() === paid;
+        return matchesSearch && matchesPaid;
+      });
+
+    setFilteredInfracciones(filtered);
+  };
+
+  if (!infracciones.length) return <p className="flex min-h-screen items-center justify-center p-4 text-xl font-bold">Cargando...</p>;
+
   return (
     <div className="p-8">
-      <h1 className="text-2xl font-bold mb-8">Infracciones</h1>
-      
+      <div className="flex flex-col md:flex-row items-center justify-between mb-8 space-y-4 md:space-y-0">
+        <h1 className="text-2xl font-bold">Infracciones</h1>
+        <div className="flex flex-col md:flex-row space-y-4  md:space-y-0 md:space-x-4">
+          <input
+            type="text"
+            value={searchTerm}
+            onChange={handleSearch}
+            placeholder="Buscar..."
+            className="w-64 md:w-64 p-2 border border-gray-300 rounded"
+          />
+          <select
+            value={filterPaid}
+            onChange={handleFilterChange}
+            className="w-full md:w-auto p-2 border border-gray-300 rounded"
+          >
+            <option value="all">Todos</option>
+            <option value="true">Pagado</option>
+            <option value="false">No Pagado</option>
+          </select>
+        </div>
+      </div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {infracciones.map((infraccion) => (
+        {filteredInfracciones.map((infraccion) => (
           <div key={infraccion.numeroInfraccion} className="bg-white p-4 rounded-lg shadow-md">
-            <h2 className="text-xl mb-2">Infracción #{infraccion.numeroInfraccion}</h2>
-            <p>Código: {infraccion.codigoInfraccion}</p>
+            <h2 className="text-xl mb-2 font-bold">Infracción N°{infraccion.numeroInfraccion}</h2>
+            <p>Código de infracción: {infraccion.codigoInfraccion}</p>
             <p>Fecha: {infraccion.fecha}</p>
             <p>Hora: {infraccion.hora}</p>
             <p>Monto: ${infraccion.monto}</p>
             <p>Pagado: {infraccion.pagado ? "Sí" : "No"}</p>
+            <p>Número de registro: {infraccion.numeroRegistroId}</p>
+            <p>Patente del vehículo: {infraccion.patenteVehiculoId}</p>
             <p>Observaciones: {infraccion.observaciones}</p>
             <div className="mt-4 space-x-4">
-              <Link href={`/infraccion/${infraccion.numeroInfraccion}`}>
+              <Link href={`/formulario/${infraccion.numeroInfraccion}`}>
                 <button className="inline-block bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded">Ver más</button>
               </Link>
-              
-              <button onClick={() => handleDelete(infraccion.numeroInfraccion)} className="inline-block bg-red-500 hover:bg-red-700 text-white px-4 py-2 rounded">Eliminar</button>
             </div>
           </div>
         ))}

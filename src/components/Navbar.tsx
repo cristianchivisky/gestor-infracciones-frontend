@@ -2,12 +2,14 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '../context/AuthContext';
+import Link from 'next/link'
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const { isAuthenticated, logout } = useAuth();
   const router = useRouter();
 
+  // Handle logout and redirect to homepage
   const handleLogout = () => {
     logout();
     router.push('/');
@@ -39,15 +41,17 @@ export default function Navbar() {
           </div>
           <div className="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
             <div className="flex-shrink-0">
-              <h4 className="text-white text-xl font-bold">Gestor de Infracciones</h4>
-            </div>
+              <Link href='/'>
+                <img src="/favicon.ico" alt="Logo" className="h-10 w-10 mr-3" />
+              </Link>
+          </div>
             {isAuthenticated && (
             <div className="hidden sm:block sm:ml-6">
               <div className="flex space-x-4">
                 <a href="/infracciones" className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Infracciones</a>
                 <a href="/vehiculos" className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Vehículos</a>
                 <a href="/registros" className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Registros</a>
-                <a href="/formulario" className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Cargar</a>
+                <a href={`/formulario/0`} className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Cargar Datos</a>
                 <button onClick={handleLogout} className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Cerrar Sesión</button>
               </div>
             </div>
@@ -62,7 +66,7 @@ export default function Navbar() {
             <a href="/infracciones" className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Infracciones</a>
             <a href="/vehiculos" className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Vehículos</a>
             <a href="/registros" className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Registros</a>
-            <a href="/formulario" className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Cargar</a>
+            <a href={`/formulario/0`} className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Cargar Datos</a>
             <button onClick={handleLogout} className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Cerrar Sesión</button>
 
           </div>

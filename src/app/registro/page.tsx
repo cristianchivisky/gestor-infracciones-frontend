@@ -5,16 +5,19 @@ import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import Link from 'next/link'
 import { toast } from 'react-hot-toast';
+import { Usuario } from '@/types/usuario';
 
 const Registro = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [email, setEmail] = useState('');
+  const [formState, setFormState] = useState<Usuario>({ username: '', password: '', email: '' });
   const router = useRouter();
+  const bcrypt = require('bcryptjs');
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log('datos: ', username, password, email)
+    setLoading(true);
+    // Hash the password before sending it to the server
+    const hashedPassword = await bcrypt.hash(formState.password, 10);
     const mutation = `
       mutation CreateUser($nombre: String!, $contrasenia: String!, $email: String!) {
         createUsuario(nombre: $nombre, contrasenia: $contrasenia, email: $email) {
@@ -28,9 +31,9 @@ const Registro = () => {
     `;
 
     const variables = {
-      nombre: username,
-      contrasenia: password,
-      email: email
+      nombre: formState.username,
+      contrasenia: hashedPassword,
+      email: formState.email
     };
 
     try {
@@ -55,7 +58,15 @@ const Registro = () => {
     } catch (error) {
       toast.error('Error en el registro');
       console.error('Registration failed:', error);
+    } finally {
+      setLoading(false);
     }
+  };
+
+  // Update form state on input changes
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormState((prevState) => ({ ...prevState, [name]: value }));
   };
 
   return (
@@ -64,30 +75,33 @@ const Registro = () => {
         <h1 className="text-2xl mb-4">Registrarse</h1>
         <input
           type="text"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          name="username"
+          value={formState.username}
+          onChange={handleChange}
           placeholder="Nombre"
           required
           className="w-full p-2 mb-4 border border-gray-300 rounded"
         />
         <input
           type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          name="email"
+          value={formState.email}
+          onChange={handleChange}
           placeholder="Email"
           required
           className="w-full p-2 mb-4 border border-gray-300 rounded"
         />
         <input
           type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          name="password" 
+          value={formState.password}
+          onChange={handleChange}
           placeholder="Contraseña"
           required
           className="w-full p-2 mb-4 border border-gray-300 rounded"
         />
-        <button type="submit" className="w-full p-2 mb-4 bg-blue-500 hover:bg-blue-700 text-white rounded cursor-pointer">
-          Registrar
+        <button type="submit" disabled={loading} className="w-full p-2 mb-4 bg-blue-500 hover:bg-blue-700 text-white rounded cursor-pointer">
+          {loading ? 'Cargando...' : 'Registrar'}
         </button>
         <Link href='/'>
           <button className="w-full p-2 bg-gray-500 hover:bg-gray-700 text-white rounded cursor-pointer">
