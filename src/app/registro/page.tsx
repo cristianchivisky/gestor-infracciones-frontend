@@ -6,7 +6,6 @@ import axios from 'axios';
 import Link from 'next/link'
 import { toast } from 'react-hot-toast';
 import { Usuario } from '@/types/usuario';
-import validator from 'validator';
 
 const Registro = () => {
   const [formState, setFormState] = useState<Usuario>({ username: '', password: '', email: '' });
@@ -25,7 +24,8 @@ const Registro = () => {
       errors.username = 'El nombre debe tener al menos 6 caracteres';
     }
     
-    if (!validator.isEmail(formState.email)) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formState.email)) {
       errors.email = 'El email no es válido';
     }
     
