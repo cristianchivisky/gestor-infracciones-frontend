@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import { Toaster } from 'react-hot-toast'
 import "./globals.css";
 import { AuthProvider } from '../context/AuthContext';
 
@@ -23,7 +22,6 @@ export default function RootLayout({
       <html lang="es">
         <body className={inter.className}>
           <Navbar/>
-          <Toaster position="top-center" reverseOrder={false} />
           <main className="min-h-screen">
           {children}
           </main>

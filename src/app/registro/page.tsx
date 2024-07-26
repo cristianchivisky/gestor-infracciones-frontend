@@ -6,6 +6,7 @@ import axios from 'axios';
 import Link from 'next/link'
 import { toast } from 'react-hot-toast';
 import { Usuario } from '@/types/usuario';
+import { Toaster } from 'react-hot-toast'
 
 const Registro = () => {
   const [formState, setFormState] = useState<Usuario>({ username: '', password: '', email: '' });
@@ -107,6 +108,7 @@ const Registro = () => {
 
   return (
     <div className="flex min-h-screen items-center justify-center p-4 dark:text-gray-100">
+      <Toaster position="top-center" reverseOrder={false} toastOptions={{ duration: 5000 }}/>
       <form onSubmit={handleSubmit} className="w-full max-w-lg bg-white  p-8 rounded-lg shadow-md dark:bg-gray-800">
         <h1 className="text-2xl mb-4">Registrarse</h1>
         <div className="mb-4">

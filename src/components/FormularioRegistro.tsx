@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { Registro, FormularioRegistroProps } from '@/types/registro';
+import { Toaster } from 'react-hot-toast'
 
 const FormularioRegistro: React.FC<FormularioRegistroProps> = ({ initialData }) => {
     const [registroData, setRegistroData] = useState<Registro>({
@@ -176,107 +177,110 @@ const FormularioRegistro: React.FC<FormularioRegistroProps> = ({ initialData }) 
     };
 
     return (
-        <form onSubmit={handleRegistroSubmit} className="bg-white dark:bg-gray-800 dark:text-gray-100 p-8 rounded-lg shadow-md max-w-lg mx-auto">
-            <h2 className="text-2xl mb-4">{initialData ? 'Actualizar Registro' : 'Crear Registro'}</h2>
-            <div className="grid grid-cols-2 gap-4">
-                <label className="col-span-2 dark:text-gray-100">
-                    Número de Registro:
-                    <input
-                        type="number"
-                        value={registroData.numeroRegistro || ''}
-                        onChange={(e) => setRegistroData({ ...registroData, numeroRegistro: Number(e.target.value) })}
-                        placeholder="Número de Registro"
-                        className="w-full p-2 mb-4 border border-gray-300 rounded dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
-                    />
-                    {errors.numeroRegistro && <span className="text-red-500 text-xs">{errors.numeroRegistro}</span>}
-                </label>
-                <label className="col-span-2 dark:text-gray-100">
-                    Nombre:
-                    <input type="text"
-                        name="nombre" 
-                        value={registroData.nombre || ''} 
-                        onChange={(e) => setRegistroData({ ...registroData, nombre: e.target.value })} 
-                        placeholder="Nombre" 
-                        className="mb-4 p-2 border border-gray-300 rounded w-full dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"/>
-                        {errors.nombre && <span className="text-red-500 text-xs">{errors.nombre}</span>}
-                </label>
-                <label className="col-span-2 dark:text-gray-100">
-                    Apellido:
-                    <input type="text" 
-                        name="apellido" 
-                        value={registroData.apellido || ''} 
-                        onChange={(e) => setRegistroData({ ...registroData, apellido: e.target.value })} 
-                        placeholder="Apellido" 
-                        className="mb-4 p-2 border border-gray-300 rounded w-full dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"/>
-                         {errors.apellido && <span className="text-red-500 text-xs">{errors.apellido}</span>}
-                </label>
-                <label className="col-span-2 dark:text-gray-100">
-                    Domicilio Calle:
-                    <input type="text" 
-                        name="domicilioCalle" 
-                        value={registroData.domicilioCalle || ''} 
-                        onChange={(e) => setRegistroData({ ...registroData, domicilioCalle: e.target.value })} 
-                        placeholder="Domicilio Calle" 
-                        className="w-full p-2 mb-4 border border-gray-300 rounded dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
-                    />
-                    {errors.domicilioCalle && <span className="text-red-500 text-xs">{errors.domicilioCalle}</span>}
-                </label>
-                <label className="col-span-2 dark:text-gray-100">
-                    Domicilio Número:
-                    <input type="number" 
-                        name="domicilioNumero" 
-                        value={registroData.domicilioNumero || ''} 
-                        onChange={(e) => setRegistroData({ ...registroData, domicilioNumero: Number(e.target.value) })} 
-                        placeholder="Domicilio Número" 
-                        className="w-full p-2 mb-4 border border-gray-300 rounded dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"/>
-                        {errors.domicilioNumero && <span className="text-red-500 text-xs">{errors.domicilioNumero}</span>}
-                </label>
-                <label className="col-span-2 dark:text-gray-100">
-                    Ciudad:
-                    <input type="text" 
-                        name="domicilioCiudad" 
-                        value={registroData.domicilioCiudad || ''} 
-                        onChange={(e) => setRegistroData({ ...registroData, domicilioCiudad: e.target.value })} 
-                        placeholder="Domicilio Ciudad" 
-                        className="w-full p-2 mb-4 border border-gray-300 rounded dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"/>
-                        {errors.domicilioCiudad && <span className="text-red-500 text-xs">{errors.domicilioCiudad}</span>}
-                </label>
-                <label className=" dark:text-gray-100">
-                    Edad:
-                    <input
-                        type="number"
-                        value={registroData.edad || ''}
-                        onChange={(e) => setRegistroData({ ...registroData, edad: Number(e.target.value) })}
-                        placeholder="Edad" 
-                        className="w-full p-2 mb-4 border border-gray-300 rounded dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
-                    />
-                    {errors.edad && <span className="text-red-500 text-xs">{errors.edad}</span>}
-                </label>
-                <label className=" dark:text-gray-100">
-                    Fecha de Emisión:
-                    <input
-                        type="date"
-                        value={registroData.fechaEmision || ''}
-                        onChange={(e) => setRegistroData({ ...registroData, fechaEmision: e.target.value })}
-                        className="w-full p-2 mb-4 border border-gray-300 rounded dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
-                    />
-                    {errors.fechaEmision && <span className="text-red-500 text-xs">{errors.fechaEmision}</span>}
-                </label>
-                <label className=" dark:text-gray-100">
-                    Fecha de Vencimiento:
-                    <input
-                        type="date"
-                        value={registroData.fechaVencimiento || ''}
-                        onChange={(e) => setRegistroData({ ...registroData, fechaVencimiento: e.target.value })}
-                        className="w-full p-2 mb-4 border border-gray-300 rounded dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
-                    />
-                    {errors.fechaVencimiento && <span className="text-red-500 text-xs">{errors.fechaVencimiento}</span>}
-                </label>
-            </div>
-            <button type="submit" className="w-full mt-4  p-2 bg-blue-500 hover:bg-blue-700 text-white rounded dark:bg-blue-600 dark:hover:bg-blue-800">
-                {initialData ? 'Actualizar Registro' : 'Guardar Registro'}
-            </button>
-        </form>
+        <div>
+            <Toaster position="top-center" reverseOrder={false} toastOptions={{ duration: 5000 }}/>
+            <form onSubmit={handleRegistroSubmit} className="bg-white dark:bg-gray-800 dark:text-gray-100 p-8 rounded-lg shadow-md max-w-lg mx-auto">
+                <h2 className="text-2xl mb-4">{initialData ? 'Actualizar Registro' : 'Crear Registro'}</h2>
+                <div className="grid grid-cols-2 gap-4">
+                    <label className="col-span-2 dark:text-gray-100">
+                        Número de Registro:
+                        <input
+                            type="number"
+                            value={registroData.numeroRegistro || ''}
+                            onChange={(e) => setRegistroData({ ...registroData, numeroRegistro: Number(e.target.value) })}
+                            placeholder="Número de Registro"
+                            className="w-full p-2 mb-4 border border-gray-300 rounded dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
+                        />
+                        {errors.numeroRegistro && <span className="text-red-500 text-xs">{errors.numeroRegistro}</span>}
+                    </label>
+                    <label className="col-span-2 dark:text-gray-100">
+                        Nombre:
+                        <input type="text"
+                            name="nombre" 
+                            value={registroData.nombre || ''} 
+                            onChange={(e) => setRegistroData({ ...registroData, nombre: e.target.value })} 
+                            placeholder="Nombre" 
+                            className="mb-4 p-2 border border-gray-300 rounded w-full dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"/>
+                            {errors.nombre && <span className="text-red-500 text-xs">{errors.nombre}</span>}
+                    </label>
+                    <label className="col-span-2 dark:text-gray-100">
+                        Apellido:
+                        <input type="text" 
+                            name="apellido" 
+                            value={registroData.apellido || ''} 
+                            onChange={(e) => setRegistroData({ ...registroData, apellido: e.target.value })} 
+                            placeholder="Apellido" 
+                            className="mb-4 p-2 border border-gray-300 rounded w-full dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"/>
+                            {errors.apellido && <span className="text-red-500 text-xs">{errors.apellido}</span>}
+                    </label>
+                    <label className="col-span-2 dark:text-gray-100">
+                        Domicilio Calle:
+                        <input type="text" 
+                            name="domicilioCalle" 
+                            value={registroData.domicilioCalle || ''} 
+                            onChange={(e) => setRegistroData({ ...registroData, domicilioCalle: e.target.value })} 
+                            placeholder="Domicilio Calle" 
+                            className="w-full p-2 mb-4 border border-gray-300 rounded dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
+                        />
+                        {errors.domicilioCalle && <span className="text-red-500 text-xs">{errors.domicilioCalle}</span>}
+                    </label>
+                    <label className="col-span-2 dark:text-gray-100">
+                        Domicilio Número:
+                        <input type="number" 
+                            name="domicilioNumero" 
+                            value={registroData.domicilioNumero || ''} 
+                            onChange={(e) => setRegistroData({ ...registroData, domicilioNumero: Number(e.target.value) })} 
+                            placeholder="Domicilio Número" 
+                            className="w-full p-2 mb-4 border border-gray-300 rounded dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"/>
+                            {errors.domicilioNumero && <span className="text-red-500 text-xs">{errors.domicilioNumero}</span>}
+                    </label>
+                    <label className="col-span-2 dark:text-gray-100">
+                        Ciudad:
+                        <input type="text" 
+                            name="domicilioCiudad" 
+                            value={registroData.domicilioCiudad || ''} 
+                            onChange={(e) => setRegistroData({ ...registroData, domicilioCiudad: e.target.value })} 
+                            placeholder="Domicilio Ciudad" 
+                            className="w-full p-2 mb-4 border border-gray-300 rounded dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"/>
+                            {errors.domicilioCiudad && <span className="text-red-500 text-xs">{errors.domicilioCiudad}</span>}
+                    </label>
+                    <label className=" dark:text-gray-100">
+                        Edad:
+                        <input
+                            type="number"
+                            value={registroData.edad || ''}
+                            onChange={(e) => setRegistroData({ ...registroData, edad: Number(e.target.value) })}
+                            placeholder="Edad" 
+                            className="w-full p-2 mb-4 border border-gray-300 rounded dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
+                        />
+                        {errors.edad && <span className="text-red-500 text-xs">{errors.edad}</span>}
+                    </label>
+                    <label className=" dark:text-gray-100">
+                        Fecha de Emisión:
+                        <input
+                            type="date"
+                            value={registroData.fechaEmision || ''}
+                            onChange={(e) => setRegistroData({ ...registroData, fechaEmision: e.target.value })}
+                            className="w-full p-2 mb-4 border border-gray-300 rounded dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
+                        />
+                        {errors.fechaEmision && <span className="text-red-500 text-xs">{errors.fechaEmision}</span>}
+                    </label>
+                    <label className=" dark:text-gray-100">
+                        Fecha de Vencimiento:
+                        <input
+                            type="date"
+                            value={registroData.fechaVencimiento || ''}
+                            onChange={(e) => setRegistroData({ ...registroData, fechaVencimiento: e.target.value })}
+                            className="w-full p-2 mb-4 border border-gray-300 rounded dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
+                        />
+                        {errors.fechaVencimiento && <span className="text-red-500 text-xs">{errors.fechaVencimiento}</span>}
+                    </label>
+                </div>
+                <button type="submit" className="w-full mt-4  p-2 bg-blue-500 hover:bg-blue-700 text-white rounded dark:bg-blue-600 dark:hover:bg-blue-800">
+                    {initialData ? 'Actualizar Registro' : 'Guardar Registro'}
+                </button>
+            </form>
+        </div>
     );
 };
 

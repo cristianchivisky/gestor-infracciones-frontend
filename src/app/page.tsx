@@ -6,6 +6,7 @@ import axios from 'axios';
 import Link from 'next/link'
 import { toast } from 'react-hot-toast';
 import { useAuth } from '../context/AuthContext';
+import { Toaster } from 'react-hot-toast'
 
 export default function Home() {
   const [username, setUsername] = useState<string>('');
@@ -87,6 +88,7 @@ export default function Home() {
   
   return (
     <div className="flex min-h-screen items-center justify-center p-4 dark:text-gray-100">
+      <Toaster position="top-center" reverseOrder={false} toastOptions={{ duration: 5000 }}/>
       <div className="w-full max-w-md bg-white dark:bg-gray-800 rounded-lg p-8 shadow-md">
         <form onSubmit={handleSubmit} className=" ">
           <h1 className="text-2xl mb-4">Iniciar Sesión</h1>
