@@ -116,8 +116,8 @@ const Registro = () => {
             value={formState.username}
             onChange={handleChange}
             placeholder="Nombre"
-            className={`w-full p-2 border ${errors.username ? 'border-red-500' : 'border-gray-300 dark:border-gray-700'} rounded dark:border-gray-700 dark:text-gray-100`}
-          />
+            className={`w-full p-2 border ${errors.username ? 'border-red-500' : 'border-gray-300 dark:border-gray-700'} rounded dark:bg-gray-700 dark:text-gray-100`}
+            />
           {errors.username && <p className="text-red-500 text-xs mt-1">{errors.username}</p>}
         </div>
         <div className="w-full mb-4">
@@ -128,7 +128,7 @@ const Registro = () => {
             onChange={handleChange}
             placeholder="Email"
             className={`w-full p-2 border ${errors.email ? 'border-red-500' : 'border-gray-300 dark:border-gray-700'} rounded dark:bg-gray-700 dark:text-gray-100`}
-          />
+            />
           {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
         </div>
         <div className="mb-4">
@@ -139,7 +139,7 @@ const Registro = () => {
             onChange={handleChange}
             placeholder="Contraseña"
             className={`w-full p-2 border ${errors.password ? 'border-red-500' : 'border-gray-300 dark:border-gray-700'} rounded dark:bg-gray-700 dark:text-gray-100`}
-          />
+            />
           {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password}</p>}
         </div>
         <button type="submit" disabled={loading} className="w-full p-2 mb-4 bg-blue-500 hover:bg-blue-700 text-white rounded cursor-pointer dark:bg-blue-600 dark:hover:bg-blue-800">
