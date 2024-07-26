@@ -116,7 +116,7 @@ const Registro = () => {
             value={formState.username}
             onChange={handleChange}
             placeholder="Nombre"
-            className={`w-full p-2 border ${errors.username ? 'border-red-500' : 'border-gray-300 dark:border-gray-700'} rounded dark:bg-gray-700 dark:text-gray-100`}
+            className={`w-full p-2 border ${errors.username ? 'border-red-500' : 'border-gray-300 dark:border-gray-700'} rounded dark:bg-gray-900 dark:text-gray-100`}
             />
           {errors.username && <p className="text-red-500 text-xs mt-1">{errors.username}</p>}
         </div>
@@ -127,7 +127,7 @@ const Registro = () => {
             value={formState.email}
             onChange={handleChange}
             placeholder="Email"
-            className={`w-full p-2 border ${errors.email ? 'border-red-500' : 'border-gray-300 dark:border-gray-700'} rounded dark:bg-gray-700 dark:text-gray-100`}
+            className={`w-full p-2 border ${errors.email ? 'border-red-500' : 'border-gray-300 dark:border-gray-700'} rounded dark:bg-gray-900 dark:text-gray-100`}
             />
           {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
         </div>
@@ -138,7 +138,7 @@ const Registro = () => {
             value={formState.password}
             onChange={handleChange}
             placeholder="Contraseña"
-            className={`w-full p-2 border ${errors.password ? 'border-red-500' : 'border-gray-300 dark:border-gray-700'} rounded dark:bg-gray-700 dark:text-gray-100`}
+            className={`w-full p-2 border ${errors.password ? 'border-red-500' : 'border-gray-300 dark:border-gray-700'} rounded dark:bg-gray-900 dark:text-gray-100`}
             />
           {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password}</p>}
         </div>
