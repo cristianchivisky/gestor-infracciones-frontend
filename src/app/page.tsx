@@ -86,8 +86,8 @@ export default function Home() {
   };
   
   return (
-    <div className="flex min-h-screen items-center justify-center p-4">
-      <div className="w-full max-w-md bg-white rounded-lg p-8 shadow-md">
+    <div className="flex min-h-screen items-center justify-center p-4 dark:text-gray-100">
+      <div className="w-full max-w-md bg-white dark:bg-gray-800 rounded-lg p-8 shadow-md">
         <form onSubmit={handleSubmit} className=" ">
           <h1 className="text-2xl mb-4">Iniciar Sesión</h1>
           <div className="mb-4">
@@ -96,7 +96,7 @@ export default function Home() {
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               placeholder="Nombre"
-              className={`w-full p-2 border ${errors.username ? 'border-red-500' : 'border-gray-300'} rounded`}
+              className={`w-full p-2 border ${errors.username ? 'border-red-500' : 'border-gray-300dark:border-gray-700'} rounded dark:border-gray-700 dark:text-gray-100`}
             />
             {errors.username && <p className="text-red-500 text-xs mt-1">{errors.username}</p>}
           </div>
@@ -106,11 +106,11 @@ export default function Home() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Contraseña"
-              className={`w-full p-2 border ${errors.password ? 'border-red-500' : 'border-gray-300'} rounded`}
+              className={`w-full p-2 border ${errors.password ? 'border-red-500' : 'border-gray-300dark:border-gray-700'} rounded dark:border-gray-700 dark:text-gray-100`}
             />
             {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password}</p>}
           </div>
-          <button type="submit" disabled={loading} className="w-full p-2 mb-4 bg-blue-500 hover:bg-blue-700 text-white rounded cursor-pointer">
+          <button type="submit" disabled={loading} className="w-full p-2 mb-4 bg-blue-500 hover:bg-blue-700 text-white rounded cursor-pointer dark:bg-blue-600 dark:hover:bg-blue-800">
             {loading ? 'Cargando...' : 'Iniciar Sesión'}
           </button>
         </form>

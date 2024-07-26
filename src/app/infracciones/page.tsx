@@ -93,7 +93,7 @@ const Infracciones = () => {
   if (!infracciones.length) return <p className="flex min-h-screen items-center justify-center p-4 text-xl font-bold">Cargando...</p>;
 
   return (
-    <div className="p-8">
+    <div className="p-8 dark:text-gray-100">
       <div className="flex flex-col md:flex-row items-center justify-between mb-8 space-y-4 md:space-y-0">
         <h1 className="text-2xl font-bold">Infracciones</h1>
         <div className="flex flex-col md:flex-row space-y-4  md:space-y-0 md:space-x-4">
@@ -102,12 +102,12 @@ const Infracciones = () => {
             value={searchTerm}
             onChange={handleSearch}
             placeholder="Buscar..."
-            className="w-64 md:w-64 p-2 border border-gray-300 rounded"
+            className="w-64 md:w-64 p-2 border border-gray-300 rounded dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
           />
           <select
             value={filterPaid}
             onChange={handleFilterChange}
-            className="w-full md:w-auto p-2 border border-gray-300 rounded"
+            className="w-full md:w-auto p-2 border border-gray-300 rounded dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
           >
             <option value="all">Todos</option>
             <option value="true">Pagado</option>
@@ -117,7 +117,7 @@ const Infracciones = () => {
       </div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {filteredInfracciones.map((infraccion) => (
-          <div key={infraccion.numeroInfraccion} className="bg-white p-4 rounded-lg shadow-md">
+          <div key={infraccion.numeroInfraccion} className="bg-white p-4 rounded-lg shadow-md dark:bg-gray-800">
             <h2 className="text-xl mb-2 font-bold">Infracción N°{infraccion.numeroInfraccion}</h2>
             <p>Código de infracción: {infraccion.codigoInfraccion}</p>
             <p>Fecha: {infraccion.fecha}</p>
@@ -129,7 +129,7 @@ const Infracciones = () => {
             <p>Observaciones: {infraccion.observaciones}</p>
             <div className="mt-4 space-x-4">
               <Link href={`/formulario/${infraccion.numeroInfraccion}`}>
-                <button className="inline-block bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded">Ver más</button>
+                <button className="inline-block bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded dark:bg-blue-600 dark:hover:bg-blue-800">Ver más</button>
               </Link>
             </div>
           </div>

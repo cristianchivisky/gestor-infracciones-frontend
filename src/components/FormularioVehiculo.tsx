@@ -166,52 +166,52 @@ const FormularioVehiculo: React.FC<FormularioVehiculoProps> = ({ initialData }) 
     };
 
     return (
-        <form onSubmit={handleVehiculoSubmit} className="bg-white p-8 rounded-lg shadow-md max-w-lg mx-auto">
+        <form onSubmit={handleVehiculoSubmit} className="bg-white dark:bg-gray-800 dark:text-gray-100 p-8 rounded-lg shadow-md max-w-lg mx-auto">
             <h2 className="text-2xl mb-4">{initialData ? 'Actualizar Vehículo' : 'Crear Vehículo'}</h2>
             <div className="grid grid-cols-2 gap-4">
-                <label className="col-span-2">
+                <label className="col-span-2 dark:text-gray-100">
                     Patente del Vehículo:
                     <input
                         type="text"
                         value={vehiculoData.patenteVehiculo || ''}
                         onChange={(e) => setVehiculoData({ ...vehiculoData, patenteVehiculo: e.target.value })}
                         placeholder="Patente Vehículo"
-                        className="w-full p-2 mb-4 border border-gray-300 rounded"
+                        className="w-full p-2 mb-4 border border-gray-300 rounded dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
                     />
                     {errors.patenteVehiculo && <span className="text-red-500 text-xs">{errors.patenteVehiculo}</span>}
                 </label>
-                <label>
+                <label className="dark:text-gray-100">
                     Año de Fabricación:
                     <input
                         type="number"
                         value={vehiculoData.anioFabricacion || ''}
                         onChange={(e) => setVehiculoData({ ...vehiculoData, anioFabricacion: Number(e.target.value) })}
                         placeholder="Año de Fabricación"
-                        className="w-full p-2 mb-4 border border-gray-300 rounded"
+                        className="w-full p-2 mb-4 border border-gray-300 rounded dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
                     />
                     {errors.anioFabricacion && <span className="text-red-500 text-xs">{errors.anioFabricacion}</span>}
                 </label>
-                <label className="col-span-2">
+                <label className="col-span-2 dark:text-gray-100">
                     Nombre del Propietario:
                     <input type="text" 
                         name="nombrePropietario" 
                         value={vehiculoData.nombrePropietario} 
                         onChange={(e) => setVehiculoData({ ...vehiculoData, nombrePropietario: e.target.value })} 
                         placeholder="Nombre Propietario" 
-                        className="w-full p-2 mb-4 border border-gray-300 rounded"/>
+                        className="w-full p-2 mb-4 border border-gray-300 rounded dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"/>
                         {errors.nombrePropietario && <span className="text-red-500 text-xs">{errors.nombrePropietario}</span>}
                 </label>
-                <label className="col-span-2">
+                <label className="col-span-2 dark:text-gray-100">
                     Apellido del Propietario:
                     <input type="text" 
                         name="apellidoPropietario" 
                         value={vehiculoData.apellidoPropietario} 
                         onChange={(e) => setVehiculoData({ ...vehiculoData, apellidoPropietario: e.target.value })} 
                         placeholder="Apellido Propietario" 
-                        className="w-full p-2 mb-4 border border-gray-300 rounded"/>
+                        className="w-full p-2 mb-4 border border-gray-300 rounded dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"/>
                         {errors.apellidoPropietario && <span className="text-red-500 text-xs">{errors.apellidoPropietario}</span>}
                 </label>
-                <label className="col-span-2">
+                <label className="col-span-2 dark:text-gray-100">
                     Domicilio Calle:
                     <input
                         type="text"
@@ -219,11 +219,11 @@ const FormularioVehiculo: React.FC<FormularioVehiculoProps> = ({ initialData }) 
                         value={vehiculoData.domicilioPropietarioCalle || ''}
                         onChange={(e) => setVehiculoData({ ...vehiculoData, domicilioPropietarioCalle: e.target.value })}
                         placeholder="Domicilio Propietario Calle"
-                        className="w-full p-2 mb-4 border border-gray-300 rounded"
+                        className="w-full p-2 mb-4 border border-gray-300 rounded dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
                     />
                     {errors.domicilioPropietarioCalle && <span className="text-red-500 text-xs">{errors.domicilioPropietarioCalle}</span>}
                 </label>
-                <label className="col-span-2">
+                <label className="col-span-2 dark:text-gray-100">
                     Domicilio Número:
                     <input
                         type="text"
@@ -231,43 +231,43 @@ const FormularioVehiculo: React.FC<FormularioVehiculoProps> = ({ initialData }) 
                         value={vehiculoData.domicilioPropietarioNumero || ''}
                         onChange={(e) => setVehiculoData({ ...vehiculoData, domicilioPropietarioNumero: Number(e.target.value) })}
                         placeholder="Domicilio Propietario Número" 
-                        className="w-full p-2 mb-4 border border-gray-300 rounded"
+                        className="w-full p-2 mb-4 border border-gray-300 rounded dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
                     />
                     {errors.domicilioPropietarioNumero && <span className="text-red-500 text-xs">{errors.domicilioPropietarioNumero}</span>}
                 </label>
-                <label className="col-span-2">
+                <label className="col-span-2 dark:text-gray-100">
                     Ciudad:
                     <input
                         type="text"
                         value={vehiculoData.domicilioPropietarioCiudad || ''}
                         onChange={(e) => setVehiculoData({ ...vehiculoData, domicilioPropietarioCiudad: e.target.value })}
                         placeholder="Domicilio Ciudad"
-                        className="w-full p-2 mb-4 border border-gray-300 rounded"
+                        className="w-full p-2 mb-4 border border-gray-300 rounded dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
                     />
                     {errors.domicilioPropietarioCiudad && <span className="text-red-500 text-xs">{errors.domicilioPropietarioCiudad}</span>}
                 </label>
-                <label className="col-span-2">
+                <label className="col-span-2 dark:text-gray-100">
                     Marca del Vehículo:
                     <input
                         type="text"
                         value={vehiculoData.marca || ''}
                         onChange={(e) => setVehiculoData({ ...vehiculoData, marca: e.target.value })}
-                        className="w-full p-2 mb-4 border border-gray-300 rounded"
+                        className="w-full p-2 mb-4 border border-gray-300 rounded dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
                     />
                     {errors.marca && <span className="text-red-500 text-xs">{errors.marca}</span>}
                 </label>
-                <label className="col-span-2">
+                <label className="col-span-2 dark:text-gray-100">
                     Modelo del Vehículo:
                     <input
                         type="text"
                         value={vehiculoData.modelo || ''}
                         onChange={(e) => setVehiculoData({ ...vehiculoData, modelo: e.target.value })}
-                        className="w-full p-2 mb-4 border border-gray-300 rounded"
+                        className="w-full p-2 mb-4 border border-gray-300 rounded dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
                     />
                     {errors.modelo && <span className="text-red-500 text-xs">{errors.modelo}</span>}
                 </label>
             </div>
-            <button type="submit" className="w-full mt-4 p-2 bg-blue-500 hover:bg-blue-700 text-white rounded">
+            <button type="submit" className="w-full mt-4 p-2 bg-blue-500 hover:bg-blue-700 text-white rounded dark:bg-blue-600 dark:hover:bg-blue-800">
                 {initialData ? 'Actualizar Vehículo' : 'Guardar Vehículo'}
             </button>
         </form>

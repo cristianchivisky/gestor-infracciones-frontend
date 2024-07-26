@@ -106,8 +106,8 @@ const Registro = () => {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center p-4">
-      <form onSubmit={handleSubmit} className="w-full max-w-lg bg-white p-8 rounded-lg shadow-md">
+    <div className="flex min-h-screen items-center justify-center p-4 dark:text-gray-100">
+      <form onSubmit={handleSubmit} className="w-full max-w-lg bg-white  p-8 rounded-lg shadow-md dark:bg-gray-800">
         <h1 className="text-2xl mb-4">Registrarse</h1>
         <div className="mb-4">
           <input
@@ -116,7 +116,7 @@ const Registro = () => {
             value={formState.username}
             onChange={handleChange}
             placeholder="Nombre"
-            className={`w-full p-2 border ${errors.username ? 'border-red-500' : 'border-gray-300'} rounded`}
+            className={`w-full p-2 border ${errors.username ? 'border-red-500' : 'border-gray-300 dark:border-gray-700'} rounded dark:border-gray-700 dark:text-gray-100`}
           />
           {errors.username && <p className="text-red-500 text-xs mt-1">{errors.username}</p>}
         </div>
@@ -127,7 +127,7 @@ const Registro = () => {
             value={formState.email}
             onChange={handleChange}
             placeholder="Email"
-            className={`w-full p-2 border ${errors.email ? 'border-red-500' : 'border-gray-300'} rounded`}
+            className={`w-full p-2 border ${errors.email ? 'border-red-500' : 'border-gray-300 dark:border-gray-700'} rounded dark:bg-gray-700 dark:text-gray-100`}
           />
           {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
         </div>
@@ -138,11 +138,11 @@ const Registro = () => {
             value={formState.password}
             onChange={handleChange}
             placeholder="Contraseña"
-            className={`w-full p-2 border ${errors.password ? 'border-red-500' : 'border-gray-300'} rounded`}
+            className={`w-full p-2 border ${errors.password ? 'border-red-500' : 'border-gray-300 dark:border-gray-700'} rounded dark:bg-gray-700 dark:text-gray-100`}
           />
           {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password}</p>}
         </div>
-        <button type="submit" disabled={loading} className="w-full p-2 mb-4 bg-blue-500 hover:bg-blue-700 text-white rounded cursor-pointer">
+        <button type="submit" disabled={loading} className="w-full p-2 mb-4 bg-blue-500 hover:bg-blue-700 text-white rounded cursor-pointer dark:bg-blue-600 dark:hover:bg-blue-800">
           {loading ? 'Cargando...' : 'Registrar'}
         </button>
         <Link href='/'>

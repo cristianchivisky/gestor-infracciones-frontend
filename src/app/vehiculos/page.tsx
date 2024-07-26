@@ -52,11 +52,11 @@ const Vehiculos = () => {
   if (!vehiculos) return <p className="flex min-h-screen items-center justify-center p-4 text-xl font-bold">Cargando...</p>;
 
   return (
-    <div className="p-8">
+    <div className="p-8 dark:text-gray-100">
       <h1 className="text-2xl font-bold mb-8">Vehículos</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {vehiculos.map((vehiculo) => (
-          <div key={vehiculo.patenteVehiculo} className="bg-white p-4 rounded-lg shadow-md">
+          <div key={vehiculo.patenteVehiculo} className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md">
             <h2 className="text-xl mb-2 font-bold">Patente: {vehiculo.patenteVehiculo}</h2>
             <p>Modelo: {vehiculo.modelo}</p>
             <p>Marca: {vehiculo.marca}</p>

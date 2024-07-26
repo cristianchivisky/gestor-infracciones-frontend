@@ -296,10 +296,10 @@ const FormularioInfraccion: React.FC<FormularioInfraccionProps> = ({ initialData
     };
     
     return (
-        <form onSubmit={initialData ? handleUpdateInfraccionSubmit : handleCreateInfraccionSubmit} className="bg-white p-8 rounded-lg shadow-md max-w-lg mx-auto">
+        <form onSubmit={initialData ? handleUpdateInfraccionSubmit : handleCreateInfraccionSubmit} className="bg-white dark:bg-gray-800 dark:text-gray-100 p-8 rounded-lg shadow-md max-w-lg mx-auto">
             <h2 className="text-2xl mb-4">{initialData ? 'Actualizar Infracción' : 'Crear Infracción'}</h2>
             <div className="grid grid-cols-2 gap-4">
-            <label htmlFor="codigoInfraccion" className="col-span-2">
+            <label htmlFor="codigoInfraccion" className="col-span-2 dark:text-gray-100">
                 Código de Infracción:
                 <input
                     id="codigoInfraccion"
@@ -310,11 +310,11 @@ const FormularioInfraccion: React.FC<FormularioInfraccionProps> = ({ initialData
                     setInfraccion({ ...infraccion, codigoInfraccion: e.target.value })
                     }
                     placeholder="Código de Infracción"
-                    className="w-full p-2 mb-4 border border-gray-300 rounded"
+                    className="w-full p-2 mb-4 border border-gray-300 rounded dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
                 />
                 {errors.codigoInfraccion && <p className="text-red-500 text-xs">{errors.codigoInfraccion}</p>}
             </label>
-            <label htmlFor="fecha">
+            <label htmlFor="fecha" className="dark:text-gray-100">
                 Fecha:
                 <input
                     id="fecha"
@@ -323,11 +323,11 @@ const FormularioInfraccion: React.FC<FormularioInfraccionProps> = ({ initialData
                     value={infraccion.fecha || ''}
                     onChange={(e) => setInfraccion({ ...infraccion, fecha: e.target.value })}
                     placeholder="Fecha"
-                    className="w-full p-2 mb-4 border border-gray-300 rounded"
+                    className="w-full p-2 mb-4 border border-gray-300 rounded dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
                 />
                  {errors.fecha && <p className="text-red-500 text-xs">{errors.fecha}</p>}
             </label>
-            <label htmlFor="hora">
+            <label htmlFor="hora" className="dark:text-gray-100">
                 Hora:
                 <input
                     id="hora"
@@ -336,11 +336,11 @@ const FormularioInfraccion: React.FC<FormularioInfraccionProps> = ({ initialData
                     value={infraccion.hora || ''}
                     onChange={(e) => setInfraccion({ ...infraccion, hora: e.target.value })}
                     placeholder="Hora"
-                    className="w-full p-2 mb-4 border border-gray-300 rounded"
+                    className="w-full p-2 mb-4 border border-gray-300 rounded dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
                 />
                 {errors.hora && <p className="text-red-500 text-xs">{errors.hora}</p>}
             </label>
-            <label htmlFor="observaciones" className="col-span-2">
+            <label htmlFor="observaciones" className="col-span-2 dark:text-gray-100">
                 Observaciones:
                 <textarea
                     id="observaciones"
@@ -349,10 +349,10 @@ const FormularioInfraccion: React.FC<FormularioInfraccionProps> = ({ initialData
                     onChange={(e) => setInfraccion({ ...infraccion, observaciones: e.target.value })}
                     placeholder="Observaciones"
                     required
-                    className="w-full p-2 mb-4 border border-gray-300 rounded"
+                    className="w-full p-2 mb-4 border border-gray-300 rounded dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
                 />
             </label>
-            <label htmlFor="monto" >
+            <label htmlFor="monto" className="dark:text-gray-100">
                 Monto:
                 <input
                     id="monto"
@@ -361,18 +361,18 @@ const FormularioInfraccion: React.FC<FormularioInfraccionProps> = ({ initialData
                     value={infraccion.monto || ''}
                     onChange={(e) => setInfraccion({ ...infraccion, monto: parseFloat(e.target.value) })}
                     placeholder="Monto"
-                    className="w-full p-2 mb-4 border border-gray-300 rounded"
+                    className="w-full p-2 mb-4 border border-gray-300 rounded dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
                 />
                 {errors.monto && <p className="text-red-500 text-xs">{errors.monto}</p>}
             </label>
-            <label htmlFor="pagado" >
+            <label htmlFor="pagado" className="dark:text-gray-100">
                 Pagado:
                 <select
                     id="pagado"
                     name="pagado"
                     value={infraccion.pagado.toString()}
                     onChange={(e) => setInfraccion({ ...infraccion, pagado: e.target.value === 'true'})}
-                    className="w-full p-2 mb-4 border border-gray-300 rounded"
+                    className="w-full p-2 mb-4 border border-gray-300 rounded dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
                 >
 
                     <option value="">Selecciona...</option>
@@ -381,14 +381,14 @@ const FormularioInfraccion: React.FC<FormularioInfraccionProps> = ({ initialData
                 </select>
                 {errors.pagado && <p className="text-red-500 text-xs">{errors.pagado}</p>}
             </label>
-            <label htmlFor="vehiculo" className="col-span-2">
+            <label htmlFor="vehiculo" className="col-span-2 dark:text-gray-100">
                 Patente del Vehículo:
                 <select
                     id="vehiculo"
                     name="vehiculo"
                     value={infraccion.patenteVehiculoId || ''}
                     onChange={(e) => setInfraccion({ ...infraccion, patenteVehiculoId: e.target.value })}
-                    className="w-full p-2 mb-4 border border-gray-300 rounded"
+                    className="w-full p-2 mb-4 border border-gray-300 rounded dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
                 >
                     <option value="">Selecciona...</option>
                     {vehiculosOptions.map((option, index) => (
@@ -397,14 +397,14 @@ const FormularioInfraccion: React.FC<FormularioInfraccionProps> = ({ initialData
                 </select>
                 {errors.patenteVehiculoId && <p className="text-red-500 text-xs">{errors.patenteVehiculoId}</p>}
             </label>
-            <label  htmlFor="registro" className="col-span-2">
+            <label  htmlFor="registro" className="col-span-2 dark:text-gray-100">
                 Número de Registro:
                 <select
                     id="registro"
                     name="registro"
                     value={infraccion.numeroRegistroId}
                     onChange={(e) => setInfraccion({ ...infraccion, numeroRegistroId: parseInt(e.target.value) })}
-                    className="w-full p-2 mb-4 border border-gray-300 rounded"
+                    className="w-full p-2 mb-4 border border-gray-300 rounded dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
                 >
                     <option value="">Selecciona...</option>
                     {registrosOptions.map((option, index) => (
@@ -414,11 +414,11 @@ const FormularioInfraccion: React.FC<FormularioInfraccionProps> = ({ initialData
                 {errors.numeroRegistroId && <p className="text-red-500 text-xs">{errors.numeroRegistroId}</p>}
             </label>
             </div>
-            <button type="submit" className="w-full mt-4 p-2 mb-4 bg-blue-500 text-white rounded">
+            <button type="submit" className="w-full mt-4 p-2 mb-4 bg-blue-500 text-white rounded dark:bg-blue-600 dark:hover:bg-blue-800">
                 {initialData ? 'Actualizar infracción' : 'Guardar infracción'}
             </button>
             {initialData && (
-                <button type="button" onClick={handleDelete} className="w-full p-2 bg-red-500 text-white rounded">
+                <button type="button" onClick={handleDelete} className="w-full p-2 bg-red-500 hover:bg-red-700 text-white rounded dark:bg-red-600 dark:hover:bg-red-800">
                     Eliminar infracción
                 </button>
             )}
