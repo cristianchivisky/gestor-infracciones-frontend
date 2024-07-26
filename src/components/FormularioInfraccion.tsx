@@ -118,7 +118,7 @@ const FormularioInfraccion: React.FC<FormularioInfraccionProps> = ({ initialData
     const handleUpdateInfraccionSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (!validateInputs()) {
-            toast.error('Corrige los errores en el formulario.');
+            toast.error('Corrige los errores en el formulario.', { duration: 5000 });
             return;
         }
         const mutation = `
@@ -157,13 +157,13 @@ const FormularioInfraccion: React.FC<FormularioInfraccionProps> = ({ initialData
         });
         console.log('Response:', response.data);
         if (response.data.errors) {
-            toast.error('Error actualizando infracción');
+            toast.error('Error actualizando infracción', { duration: 5000 });
             console.error('GraphQL Errors:', response.data.errors);
         } else {
-            toast.success('Infracción actualizada con éxito');
+            toast.success('Infracción actualizada con éxito', { duration: 5000 });
         }
         } catch (error) {
-            toast.error('Error actualizando infracción');
+            toast.error('Error actualizando infracción', { duration: 5000 });
             console.error('Error actualizando infracción:', error);
         }
     };
@@ -172,7 +172,7 @@ const FormularioInfraccion: React.FC<FormularioInfraccionProps> = ({ initialData
     const handleCreateInfraccionSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (!validateInputs()) {
-            toast.error('Corrige los errores en el formulario.');
+            toast.error('Corrige los errores en el formulario.', { duration: 5000 });
             return;
         }
         const mutation = `mutation CreateInfraccion($codigoInfraccion: String!, $fecha: String!, $hora: String!, $observaciones: String, $monto: Float!, $pagado: Boolean!, $patenteVehiculoId: String!, $numeroRegistroId: Int!) {
@@ -201,10 +201,10 @@ const FormularioInfraccion: React.FC<FormularioInfraccionProps> = ({ initialData
         try {
             const response = await axios.post(`${apiUrl}`, { query: mutation, variables }, { headers: { 'Content-Type': 'application/json' } });
             if (response.data.errors) {
-                toast.error('Error creando infracción');
+                toast.error('Error creando infracción', { duration: 5000 });
                 console.error('GraphQL Errors:', response.data.errors);
             } else {
-                toast.success('Infracción creada con éxito');
+                toast.success('Infracción creada con éxito', { duration: 5000 });
                 setInfraccion({
                     numeroInfraccion: 0,
                     codigoInfraccion: '',
@@ -218,7 +218,7 @@ const FormularioInfraccion: React.FC<FormularioInfraccionProps> = ({ initialData
                 });
             }
         } catch (error) {
-            toast.error('Error creando infracción');
+            toast.error('Error creando infracción', { duration: 5000 });
             console.error('Error creando infracción:', error);
         }
     };
@@ -248,7 +248,7 @@ const FormularioInfraccion: React.FC<FormularioInfraccionProps> = ({ initialData
                 );
         
                 if (response.data.data.deleteInfraccion.infraccion) {
-                    toast.success('Infracción eliminada correctamente');
+                    toast.success('Infracción eliminada correctamente', { duration: 5000 });
                     setInfraccion({
                         numeroInfraccion: 0,
                         codigoInfraccion: '',
@@ -261,11 +261,11 @@ const FormularioInfraccion: React.FC<FormularioInfraccionProps> = ({ initialData
                         numeroRegistroId: 0
                     });
                 } else {
-                    toast.error('Error al eliminar la infracción 1');
+                    toast.error('Error al eliminar la infracción', { duration: 5000 });
                 }
             } catch (error) {
                 console.error('Error deleting infraction:', error);
-                toast.error('Error al eliminar la infracción 2');
+                toast.error('Error al eliminar la infracción', { duration: 5000 });
             }
         };
         // Display a confirmation toast before deleting

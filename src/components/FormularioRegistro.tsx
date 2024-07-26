@@ -110,7 +110,7 @@ const FormularioRegistro: React.FC<FormularioRegistroProps> = ({ initialData }) 
     const handleRegistroSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (!validateInputs()) {
-            toast.error('Corrige los errores en el formulario.');
+            toast.error('Corrige los errores en el formulario.', { duration: 5000 });
             return;
         }
         // Define GraphQL mutation query based on the presence of initialData
@@ -164,13 +164,13 @@ const FormularioRegistro: React.FC<FormularioRegistroProps> = ({ initialData }) 
             // Send the request to the GraphQL endpoint
             const response = await axios.post(`${apiUrl}`, { query: mutation, variables }, { headers: { 'Content-Type': 'application/json' } });
             if (response.data.errors) {
-                toast.error(`Error ${initialData ? 'actualizando' : 'creando'} registro`);
+                toast.error(`Error ${initialData ? 'actualizando' : 'creando'} registro`, { duration: 5000 });
                 console.error('GraphQL Errors:', response.data.errors);
             } else {
-                toast.success(`Registro ${initialData ? 'actualizado' : 'creado'} con éxito`);
+                toast.success(`Registro ${initialData ? 'actualizado' : 'creado'} con éxito`, { duration: 5000 });
             }
         } catch (error) {
-            toast.error(`Error ${initialData ? 'actualizando' : 'creando'} registro`);
+            toast.error(`Error ${initialData ? 'actualizando' : 'creando'} registro`, { duration: 5000 });
             console.error('Error en la operación de registro:', error);
         }
     };

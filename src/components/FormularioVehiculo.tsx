@@ -103,7 +103,7 @@ const FormularioVehiculo: React.FC<FormularioVehiculoProps> = ({ initialData }) 
     const handleVehiculoSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!validateInputs()) {
-            toast.error('Corrige los errores en el formulario.');
+            toast.error('Corrige los errores en el formulario.', { duration: 5000 });
             return;
         }
         // Define mutation for GraphQL request
@@ -154,13 +154,13 @@ const FormularioVehiculo: React.FC<FormularioVehiculoProps> = ({ initialData }) 
             // Make a POST request to the GraphQL API
             const response = await axios.post(`${apiUrl}`, { query: mutation, variables }, { headers: { 'Content-Type': 'application/json' } });
             if (response.data.errors) {
-                toast.error(`Error ${initialData ? 'actualizando' : 'creando'} vehículo`);
+                toast.error(`Error ${initialData ? 'actualizando' : 'creando'} vehículo`, { duration: 5000 });
                 console.error('GraphQL Errors:', response.data.errors);
             } else {
-                toast.success(`Vehículo ${initialData ? 'actualizado' : 'creado'} con éxito`);
+                toast.success(`Vehículo ${initialData ? 'actualizado' : 'creado'} con éxito`, { duration: 5000 });
             }
         } catch (error) {
-            toast.error(`Error ${initialData ? 'actualizando' : 'creando'} vehículo`);
+            toast.error(`Error ${initialData ? 'actualizando' : 'creando'} vehículo`, { duration: 5000 });
             console.error('Error en la operación de registro:', error);
         }
     };

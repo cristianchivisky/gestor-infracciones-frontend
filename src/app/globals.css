@@ -5,13 +5,16 @@
 :root {
   --foreground-rgb: 0, 0, 0;
   --background-rgb:  196, 233, 242;
-
+  --input-bg: 255, 255, 255; 
+  --input-text: 0, 0, 0; 
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     --foreground-rgb: 255, 255, 255;
     --background-rgb: 0, 0, 0;
+    --input-bg: 30, 30, 30; 
+    --input-text: 255, 255, 255; 
   }
 }
 
@@ -19,7 +22,10 @@ body {
   color: rgb(var(--foreground-rgb));
   background-color: rgb(var(--background-rgb));
 }
-
+input, textarea, select {
+  background-color: rgb(var(--input-bg));
+  color: rgb(var(--input-text));
+}
 @layer utilities {
   .text-balance {
     text-wrap: balance;

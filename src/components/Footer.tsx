@@ -28,12 +28,6 @@ export default function Footer() {
               </div>
             </div>
             <div className="relative group">
-              <Image src="/icons/nodejs.svg" alt="Node.js" width={18} height={18} />
-              <div className="absolute top-[-1.5rem] left-1/2 transform -translate-x-1/2 -translate-y-2 text-xs bg-gray-900 text-white rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                Node.js
-              </div>
-            </div>
-            <div className="relative group">
               <Image src="/icons/postgresql.svg" alt="PostgreSQL" width={18} height={18} />
               <div className="absolute top-[-1.5rem] left-1/2 transform -translate-x-1/2 -translate-y-2 text-xs bg-gray-900 text-white rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity">
                 PostgreSQL
