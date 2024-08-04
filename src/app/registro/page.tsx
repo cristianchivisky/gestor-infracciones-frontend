@@ -11,10 +11,10 @@ import { Toaster } from 'react-hot-toast'
 const Registro = () => {
   const [formState, setFormState] = useState<Usuario>({ username: '', password: '', email: '' });
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const [passwordConfirm, setPasswordConfirm] = useState<string>('');
   const router = useRouter();
   const bcrypt = require('bcryptjs');
   const [loading, setLoading] = useState(false);
-  const apiUrl = process.env.NEXT_PUBLIC_BACKEND_URL
 
   const validateForm = () => {
     const errors: { [key: string]: string } = {};
@@ -41,7 +41,9 @@ const Registro = () => {
     } else if (!/[!@#$%^&*(),.?":{}|<>]/.test(formState.password)) {
       errors.password = 'La contraseña debe contener al menos un símbolo';
     }
-    
+    if (formState.password !== passwordConfirm) {
+      errors.passwordConfirm = 'Las contraseñas no coinciden';
+    }
     setErrors(errors);
     return Object.keys(errors).length === 0;
   };
@@ -75,7 +77,7 @@ const Registro = () => {
 
     try {
       const response = await axios.post(
-        `${apiUrl}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}`,
         {
           query: mutation,
           variables: variables
@@ -104,6 +106,9 @@ const Registro = () => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormState((prevState) => ({ ...prevState, [name]: value }));
+  };
+  const handlePasswordConfirmChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPasswordConfirm(e.target.value);
   };
 
   return (
@@ -143,6 +148,17 @@ const Registro = () => {
             className={`w-full p-2 border ${errors.password ? 'border-red-500' : 'border-gray-300 dark:border-gray-700'} rounded dark:bg-gray-900 dark:text-gray-100`}
             />
           {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password}</p>}
+        </div>
+        <div className="mb-4">
+          <input
+            type="password"
+            name="passwordConfirm"
+            value={passwordConfirm}
+            onChange={handlePasswordConfirmChange}
+            placeholder="Confirmar Contraseña"
+            className={`w-full p-2 border ${errors.passwordConfirm ? 'border-red-500' : 'border-gray-300 dark:border-gray-700'} rounded dark:bg-gray-900 dark:text-gray-100`}
+          />
+          {errors.passwordConfirm && <p className="text-red-500 text-xs mt-1">{errors.passwordConfirm}</p>}
         </div>
         <button type="submit" disabled={loading} className="w-full p-2 mb-4 bg-blue-500 hover:bg-blue-700 text-white rounded cursor-pointer dark:bg-blue-600 dark:hover:bg-blue-800">
           {loading ? 'Cargando...' : 'Registrar'}

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import Link from 'next/link'
@@ -12,11 +12,16 @@ export default function Home() {
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
-  const { login } = useAuth();
+  const { login, isAuthenticated } = useAuth();
   const router = useRouter();
   const bcrypt = require('bcryptjs');
   const [loading, setLoading] = useState<boolean>(false);
-  const apiUrl = process.env.NEXT_PUBLIC_BACKEND_URL
+  
+  useEffect(() => {
+    if (isAuthenticated) {
+      router.push('/infracciones');
+    }
+  }, [isAuthenticated, router]);
 
   // Validate form inputs
   const validateForm = () => {
@@ -60,7 +65,7 @@ export default function Home() {
 
     try {
       const response = await axios.post(
-        `${apiUrl}`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}`,
         { query, variables },
         {
           headers: {
