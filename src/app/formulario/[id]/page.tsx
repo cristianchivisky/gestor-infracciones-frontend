@@ -45,7 +45,6 @@ const Formulario = ({ params }: FormularioProps) => {
     const [registrosOptions, setRegistrosOptions] = useState<RegistroOption[]>([]);
     const [infraccionData, setInfraccionData] = useState<InfraccionData | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
-    const apiUrl = process.env.NEXT_PUBLIC_BACKEND_URL
 
     // Fetch the infracción data based on the ID
     useEffect(() => {
@@ -87,7 +86,7 @@ const Formulario = ({ params }: FormularioProps) => {
             }
             `;
     
-            const response = await axios.post(`${apiUrl}`, {
+            const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}`, {
                 query,
                 variables: { numeroInfraccion: infraccionId }
             }, {
@@ -111,7 +110,7 @@ const Formulario = ({ params }: FormularioProps) => {
             setLoading(true)
             fetchInfraccionData();
         };
-    }, [infraccionId, apiUrl]);
+    }, [infraccionId]);
     
     // Fetch options for vehicles and records
     useEffect(() => {
@@ -125,7 +124,7 @@ const Formulario = ({ params }: FormularioProps) => {
             `;
             try {
                 const response = await axios.post(
-                    'http://localhost:5000/graphql',
+                    `${process.env.NEXT_PUBLIC_BACKEND_URL}`,
                     {
                         query
                     },
@@ -154,7 +153,7 @@ const Formulario = ({ params }: FormularioProps) => {
             `;
             try {
                 const response = await axios.post(
-                    'http://localhost:5000/graphql',
+                    `${process.env.NEXT_PUBLIC_BACKEND_URL}`,
                     {
                         query
                     },

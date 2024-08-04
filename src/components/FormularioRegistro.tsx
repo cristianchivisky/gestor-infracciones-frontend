@@ -27,7 +27,6 @@ const FormularioRegistro: React.FC<FormularioRegistroProps> = ({ initialData }) 
         fechaEmision: '',
         fechaVencimiento: ''
     });
-    const apiUrl = process.env.NEXT_PUBLIC_BACKEND_URL
 
     // Update state if initialData is provided
     useEffect(() => {
@@ -163,7 +162,7 @@ const FormularioRegistro: React.FC<FormularioRegistroProps> = ({ initialData }) 
         //console.log(variables)
         try {
             // Send the request to the GraphQL endpoint
-            const response = await axios.post(`${apiUrl}`, { query: mutation, variables }, { headers: { 'Content-Type': 'application/json' } });
+            const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}`, { query: mutation, variables }, { headers: { 'Content-Type': 'application/json' } });
             if (response.data.errors) {
                 toast.error(`Error ${initialData ? 'actualizando' : 'creando'} registro`, { duration: 5000 });
                 console.error('GraphQL Errors:', response.data.errors);

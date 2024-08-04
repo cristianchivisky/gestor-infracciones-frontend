@@ -49,7 +49,6 @@ const FormularioInfraccion: React.FC<FormularioInfraccionProps> = ({ initialData
         patenteVehiculoId: '',
         numeroRegistroId: ''
     });
-    const apiUrl = process.env.NEXT_PUBLIC_BACKEND_URL
 
     // Effect to set initial form data when component mounts or initialData changes
     useEffect(() => {
@@ -150,7 +149,7 @@ const FormularioInfraccion: React.FC<FormularioInfraccionProps> = ({ initialData
         };
     
         try {
-            const response = await axios.post(`${apiUrl}`, {
+            const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}`, {
                 query: mutation,
                 variables
         }, {
@@ -200,7 +199,7 @@ const FormularioInfraccion: React.FC<FormularioInfraccionProps> = ({ initialData
         };
 
         try {
-            const response = await axios.post(`${apiUrl}`, { query: mutation, variables }, { headers: { 'Content-Type': 'application/json' } });
+            const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}`, { query: mutation, variables }, { headers: { 'Content-Type': 'application/json' } });
             if (response.data.errors) {
                 toast.error('Error creando infracción', { duration: 5000 });
                 console.error('GraphQL Errors:', response.data.errors);
@@ -239,7 +238,7 @@ const FormularioInfraccion: React.FC<FormularioInfraccionProps> = ({ initialData
     
             try {
                 const response = await axios.post(
-                    `${apiUrl}`,
+                    `${process.env.NEXT_PUBLIC_BACKEND_URL}`,
                     { query: mutation },
                     {
                         headers: {

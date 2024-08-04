@@ -8,7 +8,6 @@ import { Vehiculo } from '@/types/vehiculo';
 const Vehiculos = () => {
   useAuthRedirect();
   const [vehiculos, setVehiculos] = useState<Vehiculo[] | null>(null);
-  const apiUrl = process.env.NEXT_PUBLIC_BACKEND_URL
 
   // useEffect to fetch vehicle data when the component mounts
   useEffect(() => {
@@ -31,7 +30,7 @@ const Vehiculos = () => {
 
       try {
         const response = await axios.post(
-          `${apiUrl}`,
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}`,
           { query },
           {
             headers: {
@@ -47,7 +46,7 @@ const Vehiculos = () => {
     };
 
     fetchData();
-  }, [apiUrl]);
+  }, []);
 
   if (!vehiculos) return <p className="flex min-h-screen items-center justify-center p-4 text-xl font-bold">Cargando...</p>;
 

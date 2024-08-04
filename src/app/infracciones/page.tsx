@@ -12,7 +12,6 @@ const Infracciones = () => {
   const [filteredInfracciones, setFilteredInfracciones] = useState<Infraccion[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [filterPaid, setFilterPaid] = useState<string>('all');
-  const apiUrl = process.env.NEXT_PUBLIC_BACKEND_URL
 
   // Fetch infracciones data when the component mounts
   useEffect(() => {
@@ -35,7 +34,7 @@ const Infracciones = () => {
 
       try {
         const response = await axios.post(
-          `${apiUrl}`,
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}`,
           { query },
           {
             headers: {
@@ -52,7 +51,7 @@ const Infracciones = () => {
     };
 
     fetchData();
-  }, [apiUrl]);
+  }, []);
 
   // Handle search input change
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {

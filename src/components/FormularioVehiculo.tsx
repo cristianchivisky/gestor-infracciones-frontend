@@ -17,7 +17,6 @@ const FormularioVehiculo: React.FC<FormularioVehiculoProps> = ({ initialData }) 
         patenteVehiculo: ''
     });
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
-    const apiUrl = process.env.NEXT_PUBLIC_BACKEND_URL
 
     // Validate inputs
     const validateInputs = () => {
@@ -153,7 +152,7 @@ const FormularioVehiculo: React.FC<FormularioVehiculoProps> = ({ initialData }) 
         //console.log(variables)
         try {
             // Make a POST request to the GraphQL API
-            const response = await axios.post(`${apiUrl}`, { query: mutation, variables }, { headers: { 'Content-Type': 'application/json' } });
+            const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}`, { query: mutation, variables }, { headers: { 'Content-Type': 'application/json' } });
             if (response.data.errors) {
                 toast.error(`Error ${initialData ? 'actualizando' : 'creando'} vehículo`, { duration: 5000 });
                 console.error('GraphQL Errors:', response.data.errors);

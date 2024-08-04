@@ -8,7 +8,6 @@ import { Registro } from '@/types/registro';
 const Registros = () => {
   useAuthRedirect();
   const [registros, setRegistros] = useState<Registro[] | null>(null);
-  const apiUrl = process.env.NEXT_PUBLIC_BACKEND_URL
 
   // useEffect to fetch registro data when the component mounts
   useEffect(() => {
@@ -31,7 +30,7 @@ const Registros = () => {
 
       try {
         const response = await axios.post(
-          `${apiUrl}`,
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}`,
           { query },
           {
             headers: {
@@ -47,7 +46,7 @@ const Registros = () => {
     };
 
     fetchData();
-  }, [apiUrl]);
+  }, []);
   
   if (!registros) return <p className="flex min-h-screen items-center justify-center text-xl font-bold">Cargando...</p>;
 
